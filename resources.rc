@@ -1,0 +1,37 @@
+;
+;
+SCR_TITLESHADOW_ADDR rcdata 'data/title-shadow.scr';
+SCR_TITLE_ADDR rcdata 'data/title.scr';
+SCR_STATUSBAR_ADDR rcdata 'data/game-footer.scr';
+SCROLL_DATA_ADDR rcasm 'data/scroll.asm';
+STRINGS_POINTERS_ADDR rcasm 'data/strings.asm';
+
+;
+CHARSET2_ADDR rcdata 'data/letters.fnt';
+CHARSET3_ADDR	rcdata 'data/kret-chars.fnt';
+
+;
+PM_DATA_ADDR rcdata 'data/sprites.obj';
+LOGOS_DATA_ADDR rcdata 'data/sprites-logos.obj';
+
+; game sfx definition
+SFX_DATA_ADDR rcasm 'data/sfx-def.asm'
+
+; assembler procedures for game
+BLOCK_ASM_ADDR rcasm 'asm/block.asm';
+
+; display lists
+DLIST_TITLE_ADDR rcasm 'asm/dlist-title.asm'
+DLIST_GAME_ADDR rcasm 'asm/dlist-game.asm'
+DLIST_READIE_ADDR rcasm 'asm/dlist-readie.asm'
+DLIST_BESTS_ADDR rcasm 'asm/dlist-bests.asm'
+DLIST_HISTORY_ADDR rcasm 'asm/dlist-history.asm'
+
+;
+RAINBOW_ADDR rcasm 'asm/rainbow-data.asm'
+
+;
+BLOCKS_DEF_ADDR rcdata 'data/blocks-def.obj';
+
+; game charcter set
+CHARSET1_ADDR rcdata 'data/title.fnt'

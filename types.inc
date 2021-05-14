@@ -1,0 +1,40 @@
+type
+	TStatus = Record
+		score,
+		blocks:word;
+		level:byte;
+		nextLevel:word;
+		oldNextLevel:word;
+		blockFallSpeed:shortint;
+		blockVanishingTime:word;	// Time after which the block disappears
+		vanishWarning:word;				// Time after which thw Warning block flash
+		breakSpeed:word;					// speed of block break before vanish
+	end;
+
+	TKeys = (
+		key_RETURN = 12,
+		key_ESC = 28,
+		key_SPACE = 33,
+		key_Left = 134,
+		key_Right = 135,
+		key_Up = 142,
+		key_Down = 143
+	);
+
+	TMenu = (
+		menu_newgame = 0,
+		menu_bests = 1,
+		menu_history = 2
+	);
+
+	TBestsMode = (
+		mode_local = 0,
+		mode_disc = 1,
+		mode_net = 2,
+	);
+
+	THistoryPages = record
+		start:byte;
+		YStart:byte;
+		lines:byte;
+	end;
