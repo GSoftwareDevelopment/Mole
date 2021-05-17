@@ -17,5 +17,6 @@ Support it:
 - [submit ideas](https://github.com/GSoftwareDevelopment/Mole/issues)
 - [report bugs or corrections to the code](https://github.com/GSoftwareDevelopment/Mole/issues)
 - improve the code
+- you can also [Discuss about this project](https://github.com/GSoftwareDevelopment/Mole/discussions)
 
 Take action, don't sit idle. Show that you can and you want to be useful. Everyone knows something.
