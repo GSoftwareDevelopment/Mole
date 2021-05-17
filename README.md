@@ -10,7 +10,7 @@ The creators of the original are Andrzej Baka and Mariusz Buras. They wrote the 
 
 # RUN
 
-To run, you will need the MAD Assember compiler and an ATARI emulator, or real hardware and software that allows you to load the compiled program.
+To run, you will need the MAD Pascal compiler and an ATARI emulator, or real hardware and software that allows you to load the compiled program.
 
 # CREDITS
 
