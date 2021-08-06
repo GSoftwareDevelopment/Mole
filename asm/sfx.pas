@@ -7,6 +7,9 @@ var
 //	chnCtrl:byte absolute $Fc;
 	sfx:array[0..127] of word absolute SFX_DATA_ADDR;
 
+	audctl:byte absolute $D208;
+	skctl:byte absolute $D20F;
+
 	oldVBL:pointer;
 
 procedure SFX_tick(); Assembler; Interrupt;
@@ -138,6 +141,9 @@ begin
 			channels[i]:=$00;
   end;
 
+	audctl:=%00000000;
+	skctl:=%00;
+	skctl:=%11;
 	GetIntVec(iVBL, oldVBL);
   SetIntVec(iVBL, @SFX_tick);
   nmien := $40;
