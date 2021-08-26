@@ -14,8 +14,18 @@ CHARSET3_ADDR	rcdata 'data/kret-chars.fnt';
 PM_DATA_ADDR rcdata 'data/sprites.obj';
 LOGOS_DATA_ADDR rcdata 'data/sprites-logos.obj';
 
+; song
+; SONG_ADDR rcdata 'song/song.mem'
+; SFX_MODE_SET_ADDR rcdata 'song/sfxmodes.mem'
+; SFX_NOTE_SET_ADDR rcdata 'song/sfxnote.mem'
+; NOTE_TABLE_ADDR rcdata 'song/notetabs.mem'
+; SFX_TABLE_ADDR rcdata 'song/sfxptr.mem'
+; TAB_TABLE_ADDR rcdata 'song/tabptr.mem'
+; SFX_DATA_ADDR rcdata 'song/data.mem'
+SFX_ORG rcasm 'song/song.asm'
+
 ; game sfx definition
-SFX_DATA_ADDR rcasm 'data/sfx-def.asm'
+; SFX_DATA_ADDR rcasm 'data/sfx-def.asm'
 
 ; assembler procedures for game
 BLOCK_ASM_ADDR rcasm 'asm/block.asm';

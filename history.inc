@@ -1,6 +1,6 @@
 var
 	blinkState:boolean;
-	blinkTime:longint;
+	blinkTime:byte;
 
 procedure blinkIcon(x,y,icon:byte);
 begin
@@ -34,15 +34,15 @@ var
 		kbcode:=255;
 		repeat
 			joy2key();
-			if (getTime-blinkTime>=10) then
+			if (_timer-blinkTime>=10) then
 			begin
-				blinkTime:=getTime;
+				blinkTime:=_timer;
 				blinkIcon(37,11,icon_right);
 				blinkState:=not blinkState;
 			end;
 			scroll_tick();
 		until kbcode<>255;
-		SFX_Play(3,50,2);
+		// SFX_Play(3,50,2);
 	end;
 
 begin

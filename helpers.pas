@@ -8,7 +8,7 @@ var
 	strings_data:array[0..0] of byte absolute STRINGS_DATA_ADDR;
 
 	kbcode:byte absolute 764;
-	time:array[0..2] of byte absolute $12;
+	_timer:byte absolute $14;
 	scradr:word absolute 88;
 	oldDLI:pointer;
 	DList:word absolute $230;
@@ -35,19 +35,13 @@ var
 // 	kbcode:=255; repeat until kbcode<>255; kbcode:=255;
 // end;
 
-function getTime():longint;
-begin
-  result:=time[0] shl 16+time[1] shl 8+time[2];
-end;
-
 procedure delay(ticks:byte);
 var
-	oTM:longint;
+	oTM:byte;
 
 begin
-	oTM:=getTime;
-	repeat
-	until getTime-oTM>=ticks;
+	oTM:=_timer;
+	repeat until _timer-oTM>=ticks;
 end;
 
 procedure wait4screen();

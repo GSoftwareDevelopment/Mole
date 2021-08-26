@@ -5,21 +5,18 @@ const
 	_RAND = $d20a;
 
 var
-	testX		:byte absolute $e2;
-	testY		:byte absolute $e3;
-//	bm			:byte absolute $e6; // number of landslide blocks. 0 means that no blocks have fallen
-	tb			:byte absolute $e7; // total blocks on screen
-	Xpos		:byte absolute $e8;
-	Ypos		:byte absolute $e9;
-	Block		:byte absolute $ea;
-	Color		:byte absolute $eb;
-//	BlockW	:byte absolute $ec;
-//	BlockH	:byte absolute $ed;
+	fr0			:word absolute $70;
+	testX		:byte absolute $72;
+	testY		:byte absolute $73;
+	tb			:byte absolute $77; // total blocks on screen
+	Xpos		:byte absolute $78;
+	Ypos		:byte absolute $79;
+	Block		:byte absolute $7a;
+	Color		:byte absolute $7b;
 
-	defvec	:word absolute $f1; // 2 bytes
-	lstvec	:word absolute $f3; // 2 bytes
+	defvec	:word absolute $62; // 2 bytes
+	lstvec	:word absolute $64; // 2 bytes
 
-	fr0:word absolute $e0;
 	blocksList:array[0..255] of byte absolute BLOCKS_LIST_ADDR;
 	blocksDef:array[0..255] of byte absolute BLOCKS_DEF_ADDR;
 

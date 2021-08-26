@@ -4,7 +4,7 @@ var
 	HSCROLL:byte absolute $d404;
 	cFineScroll:shortint = 0;
 	cScrollPos:smallint = 0;
-	scrollTime:longint;
+	scrollTime:byte; // longint;
 	scrollScrOfs:word;
 	scrollLn:shortint;
 	scrollScrShift:shortint;
@@ -22,9 +22,10 @@ end;
 
 procedure scroll_tick();
 begin
-	if (getTime-scrollTime>0) then
+	if ((*getTime*)_timer-scrollTime>0) then
 	begin
-		cFineScroll:=cFineScroll-2;
+		scrollTime:=_timer; // getTime;
+		cFineScroll:=cFineScroll-1;
 		if (cFineScroll<0) then
 		begin
 			cFineScroll:=cFineScroll+16;
@@ -56,6 +57,5 @@ begin
 		begin
 			move(pointer(scroll+scrollShift),@scr[scrollScrOfs+scrollScrShift],scrollLn);
 		end;
-		scrollTime:=getTime;
 	end;
 end;

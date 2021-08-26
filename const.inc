@@ -22,6 +22,20 @@
 	stateNewBlocks	= %00000010;	//
 	stateVanishBlock= %00000100;	//
 
+const
+	plyChn = 2;
+
+	sfx_choice = 15;
+	sfx_selectUp = 16;
+	sfx_selectDn = 17;
+
+	sfx_moleMove = 9;
+	sfx_moleJump = 11;
+	sfx_moleEat  = 10;
+	sfx_moleDie  = 12;
+	sfx_blockBrk = 13;
+	sfx_blockVsh = 14;
+
 	leftBound:array[0..13] of word = ($000,$028,$050,$078,$0a0,$0c8,$0f0,$118,$140,$168,$190,$1b8,$1e0,$208);
 	rightBound:array[0..13] of word = ($027,$04f,$077,$09f,$0c7,$0ef,$117,$13f,$167,$18f,$1b7,$1df,$207,$22f);
 

@@ -143,7 +143,7 @@ var
 	phase,dir:byte;
 
 begin
-	if (moleState and maskState=stateStop) and (moleY<10) and (globalTime-moleFallenTime>=50) then
+	if (moleState and maskState=stateStop) and (moleY<10) and (moleFallenTime=0) then
 	Begin
 		ch:=buffer[rowOfs[moleY+1]+moleX];
 		if (ch=0) then
@@ -152,7 +152,7 @@ begin
 		end;
 	End;
 
-	if (globalTime-moleTime>=3) and (oMoleState<>moleState) then
+	if (moleTime=0) and (oMoleState<>moleState) then
 	begin
 		newState:=$ff;
 		state:=moleState and maskState;
@@ -168,7 +168,7 @@ begin
 					mX:=mX-2;
 					setMoleSprite(moleSpritePhases[1][phase]);
 					updateMolePosition();
-					inc(phase); if (phase and 3=2) then SFX_Play(0,50,4);
+					inc(phase); if (phase and 3=2) then SFX_Freq(3,50,sfx_moleMove);
 				end
 				else
 				begin
@@ -185,7 +185,7 @@ begin
 					mX:=mX+2;
 					setMoleSprite(moleSpritePhases[2][phase]);
 					updateMolePosition();
-					inc(phase); if (phase and 3=2) then SFX_Play(0,50,4);
+					inc(phase); if (phase and 3=2) then SFX_Freq(3,50,sfx_moleMove);
 				end
 				else
 				begin
@@ -195,7 +195,7 @@ begin
 					newState:=stateStop;
 				end;
 			end;
-			moleFallenTime:=globalTime;
+			moleFallenTime:=50; // globalTime;
 		end;
 
 		if (state=stateJump) then
@@ -205,12 +205,12 @@ begin
 				if (phase<4) then
 				begin
 					mY:=mY-4;
-					if (phase=0) then SFX_Play(0,100,6);
+					if (phase=0) then SFX_Freq(2,100,sfx_moleJump);
 					setMoleSprite(moleSpritePhases[3][dir shl 1]);
 				end
 				else
 				begin
-					SFX_Play(0,50,4);
+					SFX_Freq(3,50,sfx_moleMove);
 					setMoleSprite(moleSpritePhases[3][dir shl 1+1]);
 				end;
 				updateMolePosition();
@@ -223,7 +223,7 @@ begin
 				phase:=0;
 				newState:=stateStop;
 			end;
-			moleFallenTime:=globalTime;
+			moleFallenTime:=50;
 		end;
 
 		if (state=stateFallen) then
@@ -237,7 +237,7 @@ begin
 				end
 				else
 				begin
-					SFX_Play(0,50,4);
+					SFX_Freq(3,50,sfx_moleMove);
 					setMoleSprite(moleSpritePhases[3][dir shl 1]);
 				end;
 				updateMolePosition();
@@ -249,7 +249,7 @@ begin
 				updateMolePosition();
 				phase:=0;
 				newState:=stateStop;
-				moleFallenTime:=globalTime;
+				moleFallenTime:=50;
 				moleY:=moleY+1;
 			end;
 		end;
@@ -260,7 +260,7 @@ begin
 		else
 			moleState:=(moleState and (maskState+maskDir))+phase;	// update mole state
 
-		moleTime:=globalTime;						// reset mole timer
+		moleTime:=3; // reset mole timer
 	end;
 end;
 
@@ -303,7 +303,7 @@ begin
 			Block:=blocksList[vanishingBlockOfs+2];
 			removeBlockDef(Block);
 			vanishingBlockOfs:=$ff;
-			vanishTime:=globalTime;
+			vanishTime:=status.blockVanishingTime; // globalTime;
 			blockState:=blockState and (not stateVanishBlock);
 			points:=10;
 		end
@@ -313,7 +313,7 @@ begin
 
 	move(@blocksList[blockOfs+4],@blocksList[blockOfs],252-blockOfs);
 	//
-	SFX_Play(1,20,5);
+	SFX_Freq(3,20,sfx_moleEat);
 	move(@buffer,@scr[40],240);
 
 	if (points=0) then points:=1;
@@ -326,7 +326,8 @@ begin
 	moleState:=moleState+stateEat;
 	blockState:=(blockState and stateVanishBlock)+stateDropBlocks+stateNewBlocks;
 
-	if (globalTime-blocksTime>Status.blockFallSpeed) then blocksTime:=globalTime+10;
+	inc(blocksTime,10);
+	// if (globalTime-blocksTime>Status.blockFallSpeed) then blocksTime:=globalTime+10;
 end;
 
 //
@@ -347,45 +348,54 @@ begin
 end;
 
 procedure moleDie();
-var i,y,w:byte;
-	dieTime,anmTime:longint;
+var i,w,_w:byte;
+	y:word;
+	dieTime:byte;
+	anmTime:byte;
+
 const
 	sprofs:array[0..3] of word = ($0f0,$100,$110,$100);
 
 begin
-	SFX_Play(0,10,7);
-	i:=12; dieTime:=getTime; anmTime:=dieTime;
-	PCOL[2]:=15; HPOSP[2]:=49+mx; y:=28+my; w:=0;
+	SFX_PlaySONG(23*4); SFX_Freq(3,10,sfx_moleDie);
+	i:=12; dieTime:=60; anmTime:=4; o_timer:=_timer;
+	PCOL[2]:=15; HPOSP[2]:=49+mx; y:=$200+28+my; w:=0;
 	kbcode:=255;
 	repeat
-		if (getTime-anmTime>=4) then
+		if _timer-o_timer>0 then
+		begin
+			if anmTime>0 then dec(anmTime);
+			o_timer:=_timer;
+		end;
+		if anmTime=0 then
 		begin
 			setMoleSprite(i);
 			if (w<=48) then
 			begin
-				w:=w+1;
+				w:=w+1; _w:=w and %11;
 				if (w<17) then
-					move(@sprites[sprofs[w and %11]],@pmg[$200+y],w)
+					move(@sprites[sprofs[_w]],@pmg[y],w)
 				else
 					if (w<32) then
-						move(@sprites[sprofs[w and %11]],@pmg[$200+y],16)
+						move(@sprites[sprofs[_w]],@pmg[y],16)
 					else
 						if (w<48) then
-							move(@sprites[sprofs[w and %11]+(w-32)],@pmg[$200+y],(48-w));
+							move(@sprites[sprofs[_w]+(w-32)],@pmg[y],(48-w));
 				if (w<32) then y:=y-1;
 				if (w>32) and (w<48) then PCOL[2]:=48-w;
 			end;
 			i:=i+1; if (i>14) then i:=12;
-			anmTime:=getTime;
+			anmTime:=4;
+			dec(dieTime);
 		end;
-	until getTime-dieTime>250;
+	until dieTime=0;
 	gameOver:=true;
 	kbcode:=255;
 end;
 
 procedure blockTest();
 var
-	ofs:byte;
+	ofs,_tb:byte;
 
 begin
 	if (blockState and stateNewBlocks=stateNewBlocks) then
@@ -396,17 +406,16 @@ begin
 		else
 		Begin
 			totalBlocks:=totalBlocks+newBlocks;
-			ofs:=newBlocks shl 2;
-			move(blocksList[0],blocksList[ofs],totalBlocks shl 2);
-			move(blocksList[totalBlocks shl 2],blocksList[0],newBlocks shl 2);
+			ofs:=newBlocks shl 2; _tb:=totalBlocks shl 2;
+			move(blocksList[0],blocksList[ofs],_tb);
+			move(blocksList[_tb],blocksList[0],ofs(*newBlocks shl 2*));
 			if (blockState and stateVanishBlock=stateVanishBlock) then
 				vanishingBlockOfs:=vanishingBlockOfs+ofs;
 			blockState:=blockState or stateDropBlocks;
 		End;
 	end;
 
-//		poke(712,globalTime-blocksTime);
-	if (globalTime-blocksTime>=Status.blockFallSpeed) then
+	if blocksTime=0 then
 	begin
 		if (blockState and stateDropBlocks=stateDropBlocks) then
 		begin
@@ -417,8 +426,8 @@ begin
 				move(@buffer,@scr[40],240);
 
 			if (buffer[rowOfs[moleY]+moleX]<>0) then moleDie();
+			blocksTime:=Status.blockFallSpeed;
 		end;
-		blocksTime:=globalTime;
 	end;
 end;
 
@@ -428,7 +437,8 @@ var
 
 begin
 	if (blockState and stateVanishBlock=0) and
-		 (globalTime-vanishTime>=status.blockVanishingTime-status.vanishWarning) then // Warning of block disappearance
+		 (vanishTime=status.vanishWarning)
+		 (*(globalTime-vanishTime>=status.blockVanishingTime-status.vanishWarning)*) then // Warning of block disappearance
 	begin
 		ofs:=RandomBottomBlock(totalBlocks);
 		if (ofs<>$ff) then
@@ -438,18 +448,21 @@ begin
 			vanishBreakTime:=0; // instantly break vanishing block
 		end
 		else
-			vanishTime:=globalTime;
+			vanishTime:=status.blockVanishingTime; // globalTime;
 	end;
 
 	if (blockState and stateVanishBlock<>0) then
 	begin
-		Xpos:=blocksList[vanishingBlockOfs];
-		Ypos:=blocksList[vanishingBlockOfs+1];
-		Block:=blocksList[vanishingBlockOfs+2];
-		Color:=blocksList[vanishingBlockOfs+3];
-		if (globalTime-vanishTime>=status.blockVanishingTime) then // vanish block
+		// copy block information to registers (Xpos,Ypos,Block,Color)
+		//	Xpos:=blocksList[vanishingBlockOfs];
+		//	Ypos:=blocksList[vanishingBlockOfs+1];
+		//	Block:=blocksList[vanishingBlockOfs+2];
+		//	Color:=blocksList[vanishingBlockOfs+3];
+		move(@blocksList[vanishingBlockOfs],@Xpos,4);
+		if vanishTime=0 then // vanish block
 		begin
-			SFX_Play(1,200,8);
+			SFX_Freq(2,200,sfx_blockBrk);
+
 			ClearBlock(Xpos,Ypos,Block);
 			removeBlockDef(Block);
 
@@ -457,18 +470,19 @@ begin
 			move(@blocksList[vanishingBlockOfs+4],@blocksList[vanishingBlockOfs],(totalBlocks shl 2)-vanishingBlockOfs);
 			totalBlocks:=totalBlocks-1;
 			blockState:=stateDropBlocks+stateNewBlocks;
-			vanishTime:=globalTime;
+			vanishTime:=status.blockVanishingTime;
 			vanishingBlockOfs:=$ff;
-			if (globalTime-blocksTime>Status.blockFallSpeed) then
-				blocksTime:=globalTime;
+//			if (globalTime-blocksTime>Status.blockFallSpeed) then
+//				blocksTime:=globalTime;
 		end
 		else
 		begin
-			if (globalTime-vanishBreakTime>=Status.breakSpeed) then
+			if vanishBreakTime=0 then
 			Begin
-				SFX_Play(1,200,9);
+				SFX_Freq(2,200,sfx_blockVsh);
+
 				BreakBlock(vanishingBlockOfs shr 2);
-				vanishBreakTime:=globalTime;
+				vanishBreakTime:=Status.breakSpeed;
 				DrawBlock(Xpos,Ypos,Block,Color);
 				move(@buffer,@scr[40],240);
 			End;
@@ -478,8 +492,17 @@ end;
 
 procedure gameLoop();
 begin
+		o_timer:=_timer;
 		repeat
-			globalTime:=getTime;
+			if _timer-o_timer>0 then
+			begin
+				o_timer:=_timer;
+				if moleTime>0 then dec(moleTime);
+				if moleFallenTime>0 then dec(moleFallenTime);
+				if blocksTime>0 then dec(blocksTime);
+				if vanishTime>0 then dec(vanishTime);
+				if vanishBreakTime>0 then dec(vanishBreakTime);
+			end;
 			moleControl();
 			moleMove();
 			if (moleState and stateEat=0) and
@@ -507,16 +530,17 @@ begin
 		putSCString(90-len shr 1+i*20,string_ready,i,0)
 	end;
 	// TODO: READU SCREEN
-//	move(@ready,@scr[60],SCR_READY_SIZE); // show "GET REDY MOLE"
+//	move(@ready,@scr[60],SCR_READY_SIZE); // show "GET READY MOLE"
 
 	offPMG();
 	onVideo();
+	SFX_PlaySONG(20*4);
+
 end;
 
 procedure GameScreen();
 begin
 	setDL(DLIST_GAME_ADDR,@dli_game);
-
 // prepare screen
 	fillchar(@scr,280,0);
 	move(@statusbar,@scr[SCREEN_GAME_SIZE-SCR_STATUSBAR_SIZE],SCR_STATUSBAR_SIZE);
@@ -537,9 +561,9 @@ begin
 	onVideo();
 
 // set timers
-	globalTime:=getTime;
-	moleTime:=globalTime;
-	moleFallenTime:=globalTime;
-	blocksTime:=globalTime;
-	vanishTime:=globalTime;
+	// globalTime:=getTime;
+	moleTime:=0; // globalTime;
+	moleFallenTime:=0; //globalTime;
+	blocksTime:=status.blockFallSpeed; // globalTime;
+	vanishTime:=status.blockVanishingTime; // globalTime;
 end;

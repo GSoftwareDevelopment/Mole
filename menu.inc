@@ -30,17 +30,18 @@ begin
 		case kb of
 			key_Up:
 			begin
-				SFX_Play(3,50,1);
+				SFX_Freq(plyChn,50,sfx_selectUp);
 				if (menuOpt>0) then dec(menuOpt) else menuOpt:=2;
 			end;
 			key_Down:
 			begin
-				SFX_Play(3,40,2);
+				SFX_Freq(plyChn,40,sfx_selectDn);
 				if (menuOpt<2) then inc(menuOpt) else menuOpt:=0;
 			end;
 			key_Right,key_RETURN:
 			begin
-				SFX_Play(3,40,0);
+				// SFX_Freq(plyChn,40,sfx_choice);
+
 				case menuOpt of
 					0: gameover:=false;
 					1: bestsScreen();

@@ -1,12 +1,15 @@
 { $librarypath '../blibs/'}
-uses atari;
+{$librarypath './sfx_engine/'}
+
+{$DEFINE ROMOFF}
+uses SFX_API,atari;
 
 const
 {$i memory.inc}
 {$i const.inc}
 {$r resources.rc}
 {$i asm/dli.pas}
-{$i asm/sfx.pas}
+// {$i asm/sfx.pas}
 {$i asm/block.pas}
 {$i types.inc}
 {$i helpers.pas}
@@ -31,12 +34,13 @@ var
 	breakGame:boolean;	// indicate for break game (press ESC key in main game)
 
 // timers
-	globalTime,					// all timer must be sync with this timer
+	o_timer:byte;
 	moleTime,						// mole animation timer
 	moleFallenTime,			// The time after which the mole falls lower
-	vanishTime,					// vanish block timer
-	vanishBreakTime,		//
-	blocksTime:longint;	// blocks drop timer
+	blocksTime:byte;		// blocks drop timer
+
+	vanishTime:word;				// vanish block timer
+	vanishBreakTime:byte;		// block break timer
 
 procedure init();
 begin
@@ -49,7 +53,8 @@ begin
 // set video address to screen buffer
 	scradr:=SCREEN_BUFFER_ADDR;
 // SFX Lib initialize
-	SFX_Init();
+  SFX_StartVBL();
+
 // Keyboard
 	KRPDEL:=0;KEYREP:=0;
 end;
@@ -71,7 +76,7 @@ begin
 		ReadyScreen();
 		initNewGame();
 
-		delay(50);
+		delay(75);
 
 // prepare game
 		GameScreen();

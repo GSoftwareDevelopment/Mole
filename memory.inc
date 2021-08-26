@@ -25,8 +25,8 @@ PM_DATA_ADDR				= (PMG_BASE * $100); // sprites content in first 764 bytes of no
 PM_DATA_SIZE				= 528;
 LOGOS_DATA_ADDR			= PM_DATA_ADDR + PM_DATA_SIZE;
 
-SFX_CHANNELS_ADDR		= $A800;
-SFX_DATA_ADDR				= $A810;
+// SFX_CHANNELS_ADDR		= $A800;
+// SFX_DATA_ADDR				= $A810;
 
 // $B000
 BLOCK_ASM_ADDR			= $B100;

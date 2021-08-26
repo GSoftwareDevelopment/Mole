@@ -4,9 +4,9 @@ var
 
 procedure moveZero(src,dst:pointer; size:byte);
 var
-	srcptr:word absolute $e8;
-	dstptr:word absolute $ea;
-	count:byte absolute $e7;
+	srcptr:word absolute $e0;
+	dstptr:word absolute $e2;
+	count:byte absolute $e4;
 
 begin
 	if size=0 then exit;
@@ -129,6 +129,8 @@ begin
 
 	onVideo();
 	setLogos();
+	SFX_PlaySONG(26*4);
+
 	TitleIn();
 
 	gameOver:=true;

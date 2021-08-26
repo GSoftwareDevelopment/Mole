@@ -1,24 +1,24 @@
-fr0L		= $e0;
-fr0H		= $e1;
+fr0L		= $70;
+fr0H		= $71;
 
-moleX		= $e2;
-moleY		= $e3;
-XW			= $e4; // block X postion+Width
-YH			= $e5; // block Y postion+Height
-bm			= $e6; // number of landslide blocks. 0 means that no blocks have fallen
-tb			= $e7; // total blocks on screen
-Xpos		= $e8;
-Ypos		= $e9;
-Block		= $ea;
-Color		= $eb;
-BlockW	= $ec;
-BlockH	= $ed;
-CMask		= $ee;
+moleX		= $72;
+moleY		= $73;
+XW			= $74; // block X postion+Width
+YH			= $75; // block Y postion+Height
+bm			= $76; // number of landslide blocks. 0 means that no blocks have fallen
+tb			= $77; // total blocks on screen
+Xpos		= $78;
+Ypos		= $79;
+Block		= $7a;
+Color		= $7b;
+BlockW	= $7c;
+BlockH	= $7d;
+CMask		= $7e;
 
-scrvec	= $ef; // 2 bytes
-defvec	= $f1; // 2 bytes
-lstvec	= $f3; // 2 bytes
-tmpadr	= $f5; // 2 bytes
+scrvec	= $60; // 2 bytes
+defvec	= $62; // 2 bytes
+lstvec	= $64; // 2 bytes
+tmpadr	= $66; // 2 bytes
 
 _RAND = $d20a;
 

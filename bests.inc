@@ -47,9 +47,9 @@ begin
 		scroll_tick();
 		if (section and $80=$00) then // best list
 		begin
-			if (getTime-blinkTime>=10) then
+			if (_timer-blinkTime>=10) then
 			begin
-				blinkTime:=getTime;
+				blinkTime:=_timer;
 				blinkIcon(9,2,icon_left);
 				blinkIcon(29,2,icon_right);
 				blinkIcon(38,4,icon_up);
@@ -63,7 +63,7 @@ begin
 				case key of
 					key_left,key_ESC: exit;
 					key_right: begin
-						SFX_Play(3,50,2);
+						// SFX_Play(3,50,2);
 						fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
 						putDCString(11,2,string_bests,1,false);
 						updateBestsMode(true);
@@ -75,9 +75,9 @@ begin
 		end
 		else
 		begin // bests mode
-			if (getTime-blinkTime>=10) then
+			if (_timer-blinkTime>=10) then
 			begin
-				blinkTime:=getTime;
+				blinkTime:=_timer;
 				blinkIcon(2,3,icon_up);
 				blinkIcon(2,11,icon_down);
 				blinkIcon(7,2,icon_left);
@@ -90,17 +90,17 @@ begin
 				case key of
 					key_ESC: exit;
 					key_up: begin
-						SFX_Play(3,50,2);
+						// SFX_Play(3,50,2);
 						if (bestsMode>0) then bestsMode:=bestsMode-1;
 						updateBestsMode(true);
 					end;
 					key_down: begin
-						SFX_Play(3,50,2);
+						// SFX_Play(3,50,2);
 						if (bestsMode<2) then bestsMode:=bestsMode+1;
 						updateBestsMode(true);
 					end;
 					key_left: begin
-						SFX_Play(3,50,2);
+						// SFX_Play(3,50,2);
 						fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
 						putDCString(12,2,string_bests,0,false);
 						section:=section and $7f;
