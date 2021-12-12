@@ -18,7 +18,7 @@ begin
 	fillchar(@scr[80],SCREEN_HISTORY_SIZE-180,$00);
 	for ln:=0 to lines do
 	begin
-		sln:=stringLen(string_history[page],ln);
+		sln:=stringDCLen(string_history[page],ln) shr 1;
 		putDCString(20-sln,startY+ln,string_history[page],ln,false);
 	end;
 end;
@@ -42,6 +42,7 @@ var
 			end;
 			scroll_tick();
 		until kbcode<>255;
+		SFX_Freq(plyChn,50,sfx_selectDn);
 		// SFX_Play(3,50,2);
 	end;
 
@@ -60,12 +61,13 @@ begin
 	setScroll(scroll_history);
 	onVideo();
 
-	for i:=0 to 2 do
+	for i:=0 to 3 do
 	begin
 		case i of
-			0: updateHistoryPage(0,3,7);
-			1: updateHistoryPage(1,4,4);
-			2: updateHistoryPage(2,4,5);
+			0: updateHistoryPage(0,3,6);
+			1: updateHistoryPage(1,5,3);
+			2: updateHistoryPage(2,5,3);
+			3: updateHistoryPage(3,2,9);
 		end;
 		wait4controller();
 		key:=TKeys(kbcode); kbcode:=255;

@@ -79,8 +79,6 @@ var
 	dx:shortint;
 
 begin
-	CHBAS:=CHARSET1_PAGE;
-
 // prepare playfield buffer
 	fillchar(@buffer,240,$00); // wall character
 	for i:=0 to 11 do	begin buffer[i*20]:=$3b; buffer[i*20+19]:=$3c; end;
@@ -125,13 +123,20 @@ begin
 // initialize status
 	status.score:=0; status.blocks:=0; status.level:=0;
 	status.nextLevel:=25; status.oldNextLevel:=0;
-	status.blockFallSpeed:=75;
-	status.blockVanishingTime:=500;
-	status.vanishWarning:=200;
-	status.breakSpeed:=50;
+	status.blockFallSpeed:=20;
+	status.blockVanishingTime:=250;
+	status.vanishWarning:=100;
+	status.breakSpeed:=25;
 	gameOver:=false; breakGame:=false;
+
+// delay
+	delay(75);
 end;
 
+(*
+* level	nextLevel		blockFallSpeed	blockVanishingTime	vanishWarning		breakSpeed
+* 	0			50							75						500									200							50
+*)
 //
 //
 
@@ -266,7 +271,6 @@ end;
 
 procedure moleControl();
 var
-	kb:TKeys;
 	phase,moleDir:byte;
 
 begin
@@ -275,8 +279,8 @@ begin
 	JOY2KEY();
 	if (kbcode<>$ff) and ((phase=0) or (phase=4)) then
 	begin
-    kb:=TKeys(kbcode);
-    case kb of
+    key:=TKeys(kbcode);
+    case key of
 			key_Left: if (moleX>1) then moleState:=stateMove+dirLeft;
 			key_Right: if (moleX<18) then moleState:=stateMove+dirRight;
 			key_Up: if (moleY>2) and (moleState and maskState=stateStop) then moleState:=stateJump+moleDir;
@@ -297,6 +301,7 @@ begin
 	//	remove block from blocks list
 	totalBlocks:=totalBlocks-1;
 	blockOfs:=blockIndex shl 2;
+	Block:=blocksList[blockOfs+2];
 	if (blockState and stateVanishBlock=stateVanishBlock) then
 		if (blockOfs=vanishingBlockOfs) then // mole eat vanishing block (extra points!)
 		begin
@@ -313,11 +318,16 @@ begin
 
 	move(@blocksList[blockOfs+4],@blocksList[blockOfs],252-blockOfs);
 	//
-	SFX_Freq(3,20,sfx_moleEat);
+	if Block<>17 then
+		SFX_Freq(3,20,sfx_moleEat)
+	else
+		SFX_Freq(3,40,sfx_choice);
+
 	move(@buffer,@scr[40],240);
 
 	if (points=0) then points:=1;
 	points:=points*(12-moleY);
+
 	inc(Status.score,points);
 	inc(Status.blocks,1);
 	updateTopStatus();
@@ -326,8 +336,7 @@ begin
 	moleState:=moleState+stateEat;
 	blockState:=(blockState and stateVanishBlock)+stateDropBlocks+stateNewBlocks;
 
-	inc(blocksTime,10);
-	// if (globalTime-blocksTime>Status.blockFallSpeed) then blocksTime:=globalTime+10;
+//	inc(blocksTime,10);
 end;
 
 //
@@ -345,6 +354,32 @@ begin
 		block:=pointTest(moleX,moleY,totalBlocks);
 		if (block<$ff) then moleEatBlock(block);
 	end;
+end;
+
+procedure GameOverScreen();
+var i,len:byte;
+
+begin
+	setDL(DLIST_GAMEOVER_ADDR,@dli_gameover);
+	initPMG();
+
+	COLPF[0]:=$04; COLPF[1]:=$02; COLPF[2]:=$D6; COLPF[3]:=$2C; COLPF[4]:=$00;
+	HPOSP[0]:=128+15; PCOL[0]:=$D0; GPRIOR:=%00100000;
+
+// set character
+	CHBAS:=CHARSET4_PAGE;
+
+	fillchar(@scr,256+32,$00);
+	move(pointer(G2F_SCREEN+288),@scr[10],32*4-11);
+	move(pointer(G2F_PMG+12),@pmg[40+32+34],13);
+
+	for i:=0 to 1 do
+	begin
+		len:=stringLen(string_gameover,i);
+		putSCString(136-len shr 1+i*16,string_gameover,i,0)
+	end;
+
+	SDMCTL:=%00111001; // narrow screen (256 pixels width)
 end;
 
 procedure moleDie();
@@ -389,6 +424,12 @@ begin
 			dec(dieTime);
 		end;
 	until dieTime=0;
+
+	GameOverScreen();
+	kbcode:=255;
+	repeat
+		joy2key();
+	until kbcode<>255;
 	gameOver:=true;
 	kbcode:=255;
 end;
@@ -423,10 +464,21 @@ begin
 			if (blocksFallen=0) then
 				blockState:=blockState and (not stateDropBlocks)
 			else
+			begin
 				move(@buffer,@scr[40],240);
+				blocksTime:=Status.blockFallSpeed;
+			end;
 
-			if (buffer[rowOfs[moleY]+moleX]<>0) then moleDie();
-			blocksTime:=Status.blockFallSpeed;
+			if (buffer[rowOfs[moleY]+moleX]<>0) then
+			begin
+				block:=pointTest(moleX,moleY,totalBlocks);
+				block:=blocksList[block*4+2];
+				if block<>17 then
+					moleDie()
+				else
+				begin
+				end;
+			end;
 		end;
 	end;
 end;
@@ -516,26 +568,29 @@ procedure ReadyScreen();
 var i,len:byte;
 
 begin
-	resetDL();
+
+	setDL(DLIST_READY_ADDR,@dli_ready);
+	initPMG();
+
+	COLPF[0]:=$04; COLPF[1]:=$02; COLPF[2]:=$08; COLPF[3]:=$3A; COLPF[4]:=$00;
+	HPOSP[0]:=128+12; PCOL[0]:=$C0;
+
 // set character
-	CHBAS:=CHARSET1_PAGE;
+	CHBAS:=CHARSET4_PAGE;
 
-	colpf[0]:=$24;
-
-	fillchar(@scr,240,$00);
+	fillchar(@scr,256+32,$00);
+	move(pointer(G2F_SCREEN),@scr[11],32*8-11);
+	move(pointer(G2F_PMG),@pmg[48+32+35],12);
 
 	for i:=0 to 1 do
 	begin
 		len:=stringLen(string_ready,i);
-		putSCString(90-len shr 1+i*20,string_ready,i,0)
+		putSCString(264-len shr 1+i*16,string_ready,i,0)
 	end;
-	// TODO: READU SCREEN
-//	move(@ready,@scr[60],SCR_READY_SIZE); // show "GET READY MOLE"
 
-	offPMG();
-	onVideo();
+	SDMCTL:=%00111001; // narrow screen (256 pixels width)
+
 	SFX_PlaySONG(20*4);
-
 end;
 
 procedure GameScreen();
@@ -554,6 +609,8 @@ begin
 
 // PMG Initialize
 	initPMG();
+	PCOL[0]:=$f4; PCOL[1]:=$f8; PCOL[2]:=$00;
+
 	setMoleSprite(9);
 	updateMolePosition();
 

@@ -1,0 +1,5 @@
+player0_start
+	.he 20 22 22 36 36 36 BE FF FF 7F 7E 2C
+
+player0_gameover
+	.he 38 6C 4E 1F 5F 5B D5 E0 E0 E0 E0 C0 80

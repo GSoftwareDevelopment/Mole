@@ -13,7 +13,7 @@ var
 	oldDLI:pointer;
 	DList:word absolute $230;
 	RAND:byte absolute $d20a;
-	colpf:array[0..3] of byte absolute $2c4;
+	colpf:array[0..4] of byte absolute $2c4;
 
 	GPRIOR:byte absolute $26f;
 	PMCTL:byte absolute $d01d;
@@ -68,11 +68,19 @@ begin
 	offVideo();
 	NMIEN:=%01000000; // turn off DLI
 	delay(5);
-	SetIntVec(iDLI, dliPtr);
-	NMIEN:=%11000000; // turn on DLI
+	if dliPtr<>nil then
+	begin
+		SetIntVec(iDLI, dliPtr);
+		NMIEN:=%11000000; // turn on DLI
+	end
+	else
+	begin
+		SetIntVec(iDLI, oldDLI);
+	end;
 	DList:=dl_set;
 end;
 
+(*
 procedure resetDL();
 begin
 	offVideo();
@@ -80,14 +88,11 @@ begin
 	SetIntVec(iDLI,oldDLI);
 	DList:=DLIST_READIE_ADDR;
 end;
+*)
 
 procedure initPMG();
 begin
 	PMBASE:=PMG_BASE; PMCTL:=3; GPRIOR:=%00100001;
-	PCOL[0]:=$f4; PCOL[1]:=$f8; PCOL[2]:=$00;
-// clear PMG memory
-// BUG: propably, there is a bug in fillchar procedure
-// if we set full 1KB, we get infinity loop, and program not run)
 	fillchar(@pmg,1024,0);
 	isPMG:=true;
 end;
@@ -120,6 +125,7 @@ begin
 			joy_down: kbcode:=byte(key_Down);
 		end;
 		if (STRIG=0) then kbcode:=byte(key_RETURN);
+//		if STICK=15 then kbcode:=255;
 	end;
 end;
 
@@ -169,7 +175,31 @@ begin
 	end;
 end;
 
-procedure putDCString(x,y:byte; sId:word; subSId:byte; inv:boolean);
+function stringDCLen(sId,subSId:byte):byte;
+var
+	txtofs:word;
+
+begin
+	txtofs:=strings_pointers[sId]-STRINGS_DATA_ADDR;
+	result:=0;
+
+	// substring seek
+	while subSId>0 do
+	begin
+		while strings_data[txtofs]<>$ff do txtofs:=txtofs+1;
+		subSId:=subSId-1; txtofs:=txtofs+1;
+	end;
+
+	while strings_data[txtofs]<>$ff do
+	begin
+		ch:=strings_data[txtofs];
+		if (ch<>$00) and (ch<>$0e) and (ch<>$0f) and (ch<>$1a) then
+			inc(result);
+		inc(result); inc(txtofs);
+	end;
+end;
+
+procedure putDCString(x,y:byte; sId,subSId:byte; inv:boolean);
 var
 	ch,color:byte;
 	txtofs:word;
@@ -189,23 +219,20 @@ begin
 	while strings_data[txtofs]<>$ff do
 	begin
 		ch:=strings_data[txtofs]; txtofs:=txtofs+1;
-		if (ch=$0e) then begin // dot '.'
-			scr[scrofs]:=$1c or color; scrofs:=scrofs+1;
+		if (ch=$00) or (ch=$0e) or (ch=$0f) or (ch=$1a) then
+		begin
+			if (ch=$00) then ch:=$00; // space
+			if (ch=$0e) then ch:=$1c; // dot '.'
+			if (ch=$0f) then ch:=$1e; // slash '/'
+			if (ch=$1a) then ch:=$1d; // colon ':'
 		end
 		else
-		  if (ch=$1a) then begin // colon ':'
-				scr[scrofs]:=$1d or color; scrofs:=scrofs+1;
-			end
-			else
-				if (ch=$0f) then begin // slash '/'
-					scr[scrofs]:=$1e or color; scrofs:=scrofs+1;
-				end
-				else
-				begin
-					ch:=ch shl 1+ch and $80;
-					scr[scrofs]:=ch or color; scrofs:=scrofs+1; ch:=ch+1;
-					scr[scrofs]:=ch or color; scrofs:=scrofs+1;
-				end;
+		begin
+			ch:=ch shl 1+ch and $80;
+			scr[scrofs]:=ch or color; scrofs:=scrofs+1; ch:=ch+1;
+		end;
+		scr[scrofs]:=ch or color;
+		inc(scrofs);
 	end;
 end;
 

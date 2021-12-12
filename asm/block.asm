@@ -351,9 +351,9 @@ shufLoop cmp #18
          sec
          lda _rand
          and #31
-         cmp #17
+         cmp #18
          bmi _nosbc
-         sbc #17
+         sbc #18
 ; ...i kolor
 _nosbc   sta Block
          lda _rand
@@ -394,19 +394,22 @@ endShuffle lda #0
 
          rts
 
+;
+;
+;
 
 randomBottomBlock								; losuje jeden blok znajdujacy sie na samym dole
          lda #0
          sta fr0H
 
          lda TB
-         beq endDelOne
+         beq endRndBttmBlk_noBlocksFound
 ; oblicz offset
          asl @
          asl @
          sta TB
 
-         ldx #0 ; usaw ilość znalezionych bloków na 0 (zero)
+         ldx #0									; usaw ilość znalezionych bloków na 0 (zero)
 
 ; wyszukaj bloki przylegające do dolnej krawędzi pola gry
 findNext sec
@@ -425,6 +428,10 @@ findNext sec
          sta Ypos
          iny
          lda (lstvec),y
+;				.print "break at ",*
+				 cmp #17				; wybieraj TYLKO bloki, nie "coinsy"!
+				 beq findNext
+
          sta Block
          asl @
          asl @
@@ -450,6 +457,7 @@ endFind  stx BM
          cpx #0
          bne randOne
 ; jeżeli nie, zwróć $FF
+endRndBttmBlk_noBlocksFound
 				 ldx #$ff
          stx fr0L
          rts

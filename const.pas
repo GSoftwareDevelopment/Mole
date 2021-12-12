@@ -69,7 +69,7 @@ const
 	scroll_bestsMode= 3;
 
 	scrollSizes:array[0..3] of smallint=(
-		$207,
+		$B4,
 		$32,
 		$3B,
 		$37
@@ -84,6 +84,7 @@ const
 
 	string_menu			= 0;
 	string_bests		= 1;
-	string_history	: array[0..2] of byte = (2,3,4);
-	string_ready		= 5;
-	string_topstatus= 6;
+	string_history	: array[0..3] of byte = (2,3,4,5);
+	string_ready		= 6;
+	string_gameover	= 7;
+	string_topstatus= 8;

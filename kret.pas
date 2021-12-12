@@ -1,19 +1,18 @@
-{ $librarypath '../blibs/'}
+// {$librarypath '~/Atari/MadPascal/blibs/'}
 {$librarypath './sfx_engine/'}
 
 {$DEFINE ROMOFF}
-uses SFX_API,atari;
+uses SFX_API,atari; //,hsc_utils;
 
 const
 {$i memory.inc}
-{$i const.inc}
+{$i const.pas}
 {$r resources.rc}
 {$i asm/dli.pas}
-// {$i asm/sfx.pas}
 {$i asm/block.pas}
-{$i types.inc}
-{$i helpers.pas}
-{$i scroll.inc}
+{$i types.pas}
+{$i include/helpers.pas}
+{$i include/scroll.pas}
 
 var
 	totalBlocks:byte;
@@ -41,6 +40,7 @@ var
 
 	vanishTime:word;				// vanish block timer
 	vanishBreakTime:byte;		// block break timer
+	key:TKeys;
 
 procedure init();
 begin
@@ -59,11 +59,11 @@ begin
 	KRPDEL:=0;KEYREP:=0;
 end;
 
-{$i title.inc}
-{$i game.inc}
-{$i history.inc}
-{$i bests.inc}
-{$i menu.inc}
+{$i game/title.pas}
+{$i game/game.pas}
+{$i game/history.pas}
+{$i game/bests.pas}
+{$i game/menu.pas}
 
 begin
 	init();
@@ -76,13 +76,11 @@ begin
 		ReadyScreen();
 		initNewGame();
 
-		delay(75);
-
 // prepare game
 		GameScreen();
 
 		gameLoop();
 
-		resetDL();
+//		resetDL();
 	until false;
 end.

@@ -6,26 +6,22 @@ SCR_STATUSBAR_ADDR rcdata 'data/game-footer.scr';
 SCROLL_DATA_ADDR rcasm 'data/scroll.asm';
 STRINGS_POINTERS_ADDR rcasm 'data/strings.asm';
 
-;
+; game charcter set
+CHARSET1_ADDR rcdata 'data/title-b.fnt'
 CHARSET2_ADDR rcdata 'data/letters.fnt';
 CHARSET3_ADDR	rcdata 'data/kret-chars.fnt';
+CHARSET4_ADDR rcdata 'pics/start_gameover.fnt';
 
-;
+; sprites
 PM_DATA_ADDR rcdata 'data/sprites.obj';
 LOGOS_DATA_ADDR rcdata 'data/sprites-logos.obj';
 
-; song
-; SONG_ADDR rcdata 'song/song.mem'
-; SFX_MODE_SET_ADDR rcdata 'song/sfxmodes.mem'
-; SFX_NOTE_SET_ADDR rcdata 'song/sfxnote.mem'
-; NOTE_TABLE_ADDR rcdata 'song/notetabs.mem'
-; SFX_TABLE_ADDR rcdata 'song/sfxptr.mem'
-; TAB_TABLE_ADDR rcdata 'song/tabptr.mem'
-; SFX_DATA_ADDR rcdata 'song/data.mem'
-SFX_ORG rcasm 'song/song.asm'
+; G2F data
+G2F_SCREEN rcdata 'pics/start_gameover.scr';
+G2F_PMG	rcasm 'pics/start_gameover.pmg';
 
-; game sfx definition
-; SFX_DATA_ADDR rcasm 'data/sfx-def.asm'
+; song
+SFX_ORG rcasm 'song/song.asm'
 
 ; assembler procedures for game
 BLOCK_ASM_ADDR rcasm 'asm/block.asm';
@@ -33,7 +29,8 @@ BLOCK_ASM_ADDR rcasm 'asm/block.asm';
 ; display lists
 DLIST_TITLE_ADDR rcasm 'asm/dlist-title.asm'
 DLIST_GAME_ADDR rcasm 'asm/dlist-game.asm'
-DLIST_READIE_ADDR rcasm 'asm/dlist-readie.asm'
+DLIST_READY_ADDR rcasm 'asm/dlist-ready.asm'
+DLIST_GAMEOVER_ADDR rcasm 'asm/dlist-gameover.asm'
 DLIST_BESTS_ADDR rcasm 'asm/dlist-bests.asm'
 DLIST_HISTORY_ADDR rcasm 'asm/dlist-history.asm'
 
@@ -41,7 +38,4 @@ DLIST_HISTORY_ADDR rcasm 'asm/dlist-history.asm'
 RAINBOW_ADDR rcasm 'asm/rainbow-data.asm'
 
 ;
-BLOCKS_DEF_ADDR rcdata 'data/blocks-def.obj';
-
-; game charcter set
-CHARSET1_ADDR rcdata 'data/title.fnt'
+BLOCKS_DEF_ADDR rcasm 'data/blocks-def.asm';

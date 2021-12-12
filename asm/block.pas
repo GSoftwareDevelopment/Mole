@@ -1,5 +1,5 @@
 const
-	DefinedBlocks = 17;
+	DefinedBlocks = 18;
 
 	rowOfs:array[0..11] of byte=($00,$14,$28,$3c,$50,$64,$78,$8c,$a0,$b4,$c8,$dc);
 	_RAND = $d20a;
@@ -109,7 +109,7 @@ begin
 	if (_block>=DefinedBlocks) then
 	begin
 		defOfs:=_block shl 3;
-		move(@blocksDef[defOfs+8],@blocksDef[defOfs],255-defOfs);
+		move(@blocksDef[defOfs+8],@blocksDef[defOfs],247-defOfs);
 		dec(lastDefinedBlock);
 	end;
 end;
@@ -140,8 +140,9 @@ begin
 	begin
 		// ...wylosuj jeden
 		el:=_RAND mod el;
+		i:=els[el];
 		// zamień na uszkodzony blok
-		blocksDef[els[el]]:=blocksDef[els[el]]+6;
+		blocksDef[i]:=blocksDef[i]+6;
 		// uaktualnij index bloku na liście bloków
 		blocksList[(_blockIndex shl 2)+2]:=Block;
 		// zakończ z wynikiem true

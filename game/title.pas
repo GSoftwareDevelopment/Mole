@@ -116,10 +116,20 @@ begin
 	move(@logos[48],@pmg[$300+LOGOS_YPOS],16);
 end;
 
+procedure titleSetColor();
+begin
+	COLPF[0]:=$a8;
+	COLPF[1]:=$ca;
+	COLPF[2]:=$94;
+	COLPF[3]:=$46;
+	COLPF[4]:=$00;
+end;
+
 procedure titleInScreen();
 begin
 	initPMG();
 	setDL(DLIST_TITLE_ADDR,@dli_title);
+	titleSetColor();
 // set character
 	CHBAS:=CHARSET1_PAGE;
 	fillchar(@scr,SCREEN_TITLE_SIZE,0);
@@ -129,7 +139,7 @@ begin
 
 	onVideo();
 	setLogos();
-	SFX_PlaySONG(26*4);
+	// SFX_PlaySONG(26*4);
 
 	TitleIn();
 
@@ -140,6 +150,7 @@ procedure titleScreen();
 begin
 	initPMG();
 	setDL(DLIST_TITLE_ADDR,@dli_title);
+	titleSetColor();
 // set character
 	CHBAS:=CHARSET1_PAGE;
 	fillchar(@scr,SCREEN_TITLE_SIZE,0);

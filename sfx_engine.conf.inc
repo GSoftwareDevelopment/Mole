@@ -1,4 +1,4 @@
-{$DEFINE SFX_SWITCH_ROM}         // Enables RAM under ROM for SFX engine (on interrupt)
+// {$DEFINE SFX_SWITCH_ROM}         // Enables RAM under ROM for SFX engine (on interrupt)
 {$DEFINE SFX_previewChannels}    // Enables live viewing of data in channels
 {$DEFINE SFX_SYNCAUDIOOUT}       // Enables audio output buffering for better audio synchronization
 
@@ -16,19 +16,19 @@ SFX_REGISTERS     = $f0;
 
 SFX_CHANNELS_ADDR = $6C0;
 
-SFX_ORG = $c000;
+SFX_ORG = $7000;
 
-NOTE_TABLE_PAGE   = $c0; // hi(SFX_ORG);
-NOTE_TABLE_ADDR		= $c000; // SFX_ORG;
+NOTE_TABLE_PAGE   = hi(SFX_ORG);		// $80
+NOTE_TABLE_ADDR		= SFX_ORG;				// $8000
 
-SFX_MODE_SET_ADDR	= $c100; // SFX_ORG+$100;
-SFX_NOTE_SET_ADDR = $c113; // SFX_MODE_SET_ADDR+$40;
+SFX_MODE_SET_ADDR	= SFX_ORG+$100;		// $8100
+SFX_NOTE_SET_ADDR = SFX_ORG+$113;		// $8113
 
-SFX_TABLE_ADDR    = $c126; // SFX_NOTE_SET_ADDR+$40;
-TAB_TABLE_ADDR    = $c14c; // SFX_TABLE_ADDR+$80;
+SFX_TABLE_ADDR    = SFX_ORG+$126;		// $8126
+TAB_TABLE_ADDR    = SFX_ORG+$14c;		// $814c
 
-SONG_ADDR					= $c18a; // TAB_TABLE_ADDR+$80;
-SFX_DATA_ADDR			= $c28a; // SONG_ADDR+$100;
+SONG_ADDR					= SFX_ORG+$18a;		// $818a
+SFX_DATA_ADDR			= SFX_ORG+$28a;		// $828a
 
 // SONG_ADDR         = $CB00;                // table of SONG definition
 // SFX_MODE_SET_ADDR = $CC00;                // table of SFX modes

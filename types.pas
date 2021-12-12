@@ -11,14 +11,25 @@ type
 		breakSpeed:word;					// speed of block break before vanish
 	end;
 
+// 	PBestEntry=^TBestEntry;
+ 	TBestEntry=record
+ 		nick:string[8];
+ 		score:string[6];
+ 		_score:cardinal;
+ 	end;
+
 	TKeys = (
+		key_Left = 6,
+		key_Right = 7,
 		key_RETURN = 12,
+		key_Up = 14,
+		key_Down = 15
 		key_ESC = 28,
 		key_SPACE = 33,
-		key_Left = 134,
-		key_Right = 135,
-		key_Up = 142,
-		key_Down = 143
+//		key_Left = 134,
+//		key_Right = 135,
+//		key_Up = 142,
+//		key_Down = 143
 	);
 
 	TMenu = (

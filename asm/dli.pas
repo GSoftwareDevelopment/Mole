@@ -91,6 +91,192 @@ l1       lda RAINBOW_ADDR,y
 };
 end;
 
+procedure dli_ready(); Assembler; Interrupt;
+asm {
+vdli		= $200;
+wsync		= $d40a;
+chbase	= $d409;
+dmactl	= $d400;
+
+; Register backup for DLI interrupt
+_regA 	= $fd;
+_regX 	= $fe;
+_regY 	= $ff;
+
+dli_ready_image_0
+				sta _regA
+				stx _regX
+				sty	_regY
+
+c6			lda #$16
+c7			ldx #$04
+c8			ldy #$02
+				sta wsync		;line=24
+				sta $D016
+				stx $D017
+				sty $D018
+c9			lda #$2C
+				sta $D019
+
+				lda #>dli_ready_image_1
+				sta vdli+1
+				lda #<dli_ready_image_1
+				sta vdli
+
+				lda _regA
+				ldx _regX
+				ldy _regY
+
+				rti
+
+dli_ready_image_1
+				sta _regA
+				stx _regX
+				sty	_regY
+
+c10	lda #$14
+c11	ldx #$12
+c12	ldy #$28
+	sta wsync		;line=32
+	sta $D017
+	stx $D018
+	sty $D019
+
+				lda #>dli_ready_image_2
+				sta vdli+1
+				lda #<dli_ready_image_2
+				sta vdli
+
+				lda _regA
+				ldx _regX
+				ldy _regY
+
+				rti
+
+dli_ready_image_2
+				sta _regA
+				stx _regX
+				sty	_regY
+
+c13	lda #$02
+c14	ldx #$14
+c15	ldy #$04
+	sta wsync		;line=40
+	sta $D017
+	stx $D018
+	sty $D019
+
+				lda #>dli_ready_image_3
+				sta vdli+1
+				lda #<dli_ready_image_3
+				sta vdli
+
+				lda _regA
+				ldx _regX
+				ldy _regY
+
+				rti
+
+dli_ready_image_3
+				sta _regA
+				stx _regX
+				sty	_regY
+
+c16	lda #$14
+c17	ldx #$12
+c18	ldy #$14
+	sta wsync		;line=48
+	sta $D017
+	stx $D018
+	sty $D019
+	sta wsync		;line=49
+	sta wsync		;line=50
+	lda #$00
+	sta wsync		;line=51
+	sta $D01B
+
+				lda #>dli_ready_image_4
+				sta vdli+1
+				lda #<dli_ready_image_4
+				sta vdli
+
+				lda _regA
+				ldx _regX
+				ldy _regY
+
+				rti
+
+dli_ready_image_4
+				sta _regA
+				stx _regX
+
+c19	lda #$04
+c20	ldx #$02
+	sta wsync		;line=56
+	sta $D017
+	stx $D018
+
+				lda #>dli_ready_footer
+				sta vdli+1
+				lda #<dli_ready_footer
+				sta vdli
+
+				lda _regA
+				ldx _regX
+
+				rti
+
+dli_ready_footer
+				sta _regA
+				stx _regX
+
+c21			lda #CHARSET1_PAGE
+c22			ldx #$0E
+				sta wsync		;line=64
+				sta chbase
+				stx $D016
+
+				lda #>dli_ready_image_0
+				sta vdli+1
+				lda #<dli_ready_image_0
+				sta vdli
+
+				lda _regA
+				ldx _regX
+
+				rti
+};
+end;
+
+procedure dli_gameover(); Assembler; Interrupt;
+asm {
+vdli		= $200;
+wsync		= $d40a;
+chbase	= $d409;
+dmactl	= $d400;
+
+; Register backup for DLI interrupt
+_regA 	= $fd;
+_regX 	= $fe;
+_regY 	= $ff;
+
+dli_gameover_footer
+				sta _regA
+				stx _regX
+
+c23			lda #CHARSET1_PAGE
+c24			ldx #$0E
+				sta wsync		;line=64
+				sta chbase
+				stx $D016
+
+				lda _regA
+				ldx _regX
+
+				rti
+};
+end;
+
 procedure dli_game(); Assembler; Interrupt;
 asm {
 vdli		= $200;

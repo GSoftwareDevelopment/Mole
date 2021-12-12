@@ -2,32 +2,32 @@ var
 	menuOpt:byte = 0;
 
 procedure updateMenu();
-const
-	sofs:array[0..2] of word = (586,606,626);
+// const
+//	sofs:array[0..2] of word = (586,606,626);
 
 var
 	i:byte;
+	sofs:word;
 
 begin
+	sofs:=586;
 	for i:=0 to 2 do
 	begin
 		if (i=menuOpt) then
-			putSCString(sofs[i],string_menu,i,1)
+			putSCString(sofs(*[i]*),string_menu,i,1)
 		else
-			putSCString(sofs[i],string_menu,i,0);
+			putSCString(sofs(*[i]*),string_menu,i,0);
+		inc(sofs,20);
 	end;
 end;
 
 procedure menuControl();
-var
-	kb:TKeys;
-
 begin
 	joy2key();
 	if (kbcode<>$ff) then
 	begin
-		kb:=TKeys(kbcode);
-		case kb of
+		key:=TKeys(kbcode);
+		case key of
 			key_Up:
 			begin
 				SFX_Freq(plyChn,50,sfx_selectUp);
@@ -40,7 +40,7 @@ begin
 			end;
 			key_Right,key_RETURN:
 			begin
-				// SFX_Freq(plyChn,40,sfx_choice);
+				SFX_Freq(plyChn,40,sfx_choice);
 
 				case menuOpt of
 					0: gameover:=false;

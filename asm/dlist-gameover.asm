@@ -5,11 +5,15 @@
 ; title screen display list
 
 dl_ready_die
-		dta DL_BLANK8
-    dta DL_BLANK8
-    dta DL_BLANK8
-    dta DL_MODE_20x12T5 + DL_LMS, a(SCREEN_ADDR)
-    :11 dta DL_MODE_20x12T5
+		:10 dta DL_BLANK8
+
+    dta DL_MODE_40x24T5 + DL_LMS, a(SCREEN_ADDR)
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5 + DL_DLI
+
+		:2 dta DL_MODE_20x12T5
+
     dta DL_JVB, a(dl_ready_die) ; jump to start
 
 		end

@@ -4,7 +4,9 @@ strings_pointers
 			dta a(strings_history_page0)
 			dta a(strings_history_page1)
 			dta a(strings_history_page2)
+			dta a(strings_controls_page3);
 			dta a(strings_ready)
+			dta a(string_gameover)
 			dta a(strings_top_status)
 			.print "STRINGS POINTERS SIZE: ", *-strings_pointers
 
@@ -24,35 +26,51 @@ strings_bests
 
 strings_history
 strings_history_page0
-			dta d'NATURA SPRAWILA,',$FF;
-			dta d'ZE URODZILES SIE',$FF
-			dta $FF,d'KRETEM'*,$FF,$FF
-			dta d'ZATECHLA PIWNICA',$FF
-			dta d'STAREGO PALACU',$FF
-			dta d'JEST TWOIM DOMEM',$FF
+;           01234567890123456789
+			dta d'KRET ',d'STEFAN'*,$FF
+			dta d'JEST MA&# NIEZDAR#.',$FF
+			dta $FF
+			dta d'WSZED& DO MAGAZYNU',$FF
+			dta d'PE&NEGO PACZEK',$FF
+			dta d'I NIEOPATRZNIE',$FF
+			dta d'WSZYSTKIE WYWR(CI&.',$FF
 			dta $ff
 
 strings_history_page1
-			dta d'WLASCICIEL-SADYSTA',$FF
-			dta d'ZRZUCA CI NA GLOWE',$FF
-			dta d'GRUZ, NIE WIEDZAC,',$FF
-			dta d'ZE JEST ON TWOIM',$FF
-			dta d'JEDYNYM POZYWIENIEM.',$FF
+			dta d'SWOJ#  NIEZDARNO)CI#',$FF
+			dta d'SPRAWIA,*E  WSZYSTKO',$FF
+			dta d'NA NIEGO SPADAJA.',$FF
 			dta $ff
 
 strings_history_page2
-			dta d'JEDNAK UWAZAJ'*,$FF
-			dta $FF
-			dta d'KAZDA CEGLA MOZE',$FF
-			dta d'CIE PRZYGNIESC,',$FF
-			dta d'SKRACAJAC TWOJ',$FF
-			dta d'KRECI ZYWOT',$FF
+			dta d'MUSI  UNIKA$',$FF
+			dta d'ZGNIECENIA'*,$FF
+			dta d'I ODNALE+$ WYJ)CIE',$FF
+			dta d'Z PU&APKI.',$FF
+			dta $ff
+
+strings_controls_page3
+; Ą - #  Ć - $  Ę - %  Ł - &  Ń - '  Ó - (  Ś - )  Ż - *  Ź - +
+;           01234567890123456789
+			dta d'PORUSZANIE KRETEM'*,$ff
+			dta $ff
+			dta d'JOYSTICK',$ff
+			dta d'LEWO'*,d'/',d'PRAWO'*,d' CHODZENIE',$ff
+			dta d'G(RA'*,d' SKOK',$ff
+			dta $ff
+			dta d'KLAWIATURA',$ff
+			dta d'U*YJ STRZA&EK'*,$ff
+			dta d'ESC'*,d' KO''CZY GR%',$ff
 			dta $ff
 
 strings_ready
-			dta d'SZYKUJ SIE',$FF
-			dta d'KRECIE',$FF
+			dta d'SZYKUJ SI%',$FF
+			dta d'STEFAN',$FF
 			dta $ff
+
+string_gameover
+			dta d'STEFAN',$FF
+			dta d'PAD&',$FF
 
 strings_top_status
 			dta d'PUNKTY',$FF
