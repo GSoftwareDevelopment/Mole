@@ -1,10 +1,10 @@
 const
- 	maxBests = 8;
- 	maxBestsOnScreen = 8;
+	maxBests = 8;
+	maxBestsOnScreen = 8;
 
 var
 	bestsMode:byte=mode_local; // default best mode: local
- 	bests:array[0..maxBests*sizeOf(TBestEntry)] of byte;
+	bests:array[0..maxBests*sizeOf(TBestEntry)] of byte;
 	bestEntry:TBestEntry;
 	bestsSection:byte;
 	bestsTotalPages,
@@ -17,7 +17,7 @@ var
 begin
 	bestEntry.nick:='';
 	bestEntry.score:='000000';
-	bestEntry._score:=1;
+	bestEntry._score:=0;
 	for i:=0 to maxBests-1 do
 	begin
 		move(@bestEntry,@bests[i*sizeOf(TBestEntry)],sizeOf(TBestEntry));
@@ -29,7 +29,6 @@ var i,y:byte;
 		place:string[2];
 
 begin
-	createBests();
 	for i:=0 to maxBestsOnScreen-1 do
 	begin
 		move(@bests[i*sizeOf(TBestEntry)],@bestEntry,sizeOf(TBestEntry));
@@ -70,9 +69,24 @@ begin
 	end;
 end;
 
-function bests_list():boolean;
+procedure updateScreen2Bests();
 begin
-	result:=false;
+	fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
+	putDCString(12,2,string_bests,0,false);
+	updateBestsScreen();
+	setScroll(scroll_bestsList);
+end;
+
+procedure updateScreen2Options();
+begin
+	fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
+	putDCString(11,2,string_bests,1,false);
+	updateBestsMode(true);
+	setScroll(scroll_bestsMode);
+end;
+
+procedure bests_list();
+begin
 	if (_timer-blinkTime>=10) then
 	begin
 		blinkTime:=_timer;
@@ -87,23 +101,18 @@ begin
 	begin
 		key:=TKeys(kbcode); kbcode:=255;
 		case key of
-			key_left,key_ESC: exit(true);
+			key_left,key_ESC: begin SFX_Freq(plyChn,50,sfx_selectDn); bestsSection:=0; exit; end;
 			key_right: begin
 				SFX_Freq(plyChn,50,sfx_selectDn);
-				fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
-				putDCString(11,2,string_bests,1,false);
-				updateBestsMode(true);
-				bestsSection:=1;
-				setScroll(scroll_bestsMode);
-				key:=TKeys(255);
+				updateScreen2Options();
+				bestsSection:=2;
 			end;
 		end;
 	end;
 end;
 
-function bests_mode():boolean;
+procedure bests_mode();
 begin
-	result:=false;
 	if (_timer-blinkTime>=10) then
 	begin
 		blinkTime:=_timer;
@@ -117,7 +126,7 @@ begin
 	begin
 		key:=TKeys(kbcode); kbcode:=255;
 		case key of
-			key_ESC: exit(true);
+			key_ESC: begin SFX_Freq(plyChn,50,sfx_selectDn); bestsSection:=0; exit; end;
 			key_up: begin
 				SFX_Freq(plyChn,50,sfx_selectUp);
 				if (bestsMode>0) then bestsMode:=bestsMode-1;
@@ -130,32 +139,27 @@ begin
 			end;
 			key_left: begin
 				SFX_Freq(plyChn,50,sfx_selectDn);
-				fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
-				putDCString(12,2,string_bests,0,false);
-				bestsSection:=0;
-				updateBestsScreen();
-				setScroll(scroll_bestsList);
-				key:=TKeys(255);
+				bestsSection:=1;
+				updateScreen2Bests();
 			end;
 		end;
 	end;
 end;
 
 procedure bestsLoop();
-var
-	leaveBests:boolean;
+// var
+//	leaveBests:boolean;
 
 begin
-	bestsSection:=0; bestsTotalPages:=5; bestsCurrentPage:=0;
-	kbcode:=255; updateBestsScreen();
-	setScroll(scroll_bestsList);
+	bestsSection:=1; bestsTotalPages:=5; bestsCurrentPage:=0;
+	kbcode:=255;
 	repeat
 		scroll_tick();
-		if (bestsSection=0) then
-			leaveBests:=bests_list()
-		else
-			leaveBests:=bests_mode();
-	until leaveBests;
+		if (bestsSection=1) then
+			bests_list()
+		else if (bestsSection=2) then
+			bests_mode();
+	until bestsSection=0;
 end;
 
 procedure bestsScreen();
@@ -164,6 +168,7 @@ var
 	ofs:word;
 
 begin
+	createBests();
 	setDL(DLIST_BESTS_ADDR,@dli_bests);
 // set character
 	CHBAS:=CHARSET1_PAGE;
@@ -174,11 +179,9 @@ begin
 	fillchar(@scr[SCREEN_BESTS_SIZE-100],80,$3a);
 	ofs:=SCREEN_BESTS_SIZE-60;
 	for i:=0 to 19 do	begin	scr[ofs]:=$36; ofs:=ofs+1; scr[ofs]:=$37; ofs:=ofs+1;	end;
-	setScroll(scroll_bestsList);
+	updateScreen2Bests();
 
 	onVideo();
-
-	putDCString(12,2,string_bests,0,false);
 
 	bestsLoop();
 

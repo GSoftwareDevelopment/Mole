@@ -39,13 +39,13 @@ strings_history_page0
 strings_history_page1
 			dta d'SWOJ#  NIEZDARNO)CI#',$FF
 			dta d'SPRAWIA,*E  WSZYSTKO',$FF
-			dta d'NA NIEGO SPADAJA.',$FF
+			dta d'NA NIEGO SPADA.',$FF
 			dta $ff
 
 strings_history_page2
-			dta d'MUSI  UNIKA$',$FF
-			dta d'ZGNIECENIA'*,$FF
-			dta d'I ODNALE+$ WYJ)CIE',$FF
+			dta d'MUSI ZBIERA$ PACZKI',$ff
+			dta d'I UNIKA$ ZGNIECENIA'*,$FF
+			dta d'BY ODNALE+$ WYJ)CIE',$FF
 			dta d'Z PU&APKI.',$FF
 			dta $ff
 
@@ -77,4 +77,3 @@ strings_top_status
 			dta d'POZIOM',$FF
 
 		.print "STRINGS SIZE: ", *-strings_pointers
-

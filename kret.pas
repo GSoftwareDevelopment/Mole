@@ -1,8 +1,7 @@
 // {$librarypath '~/Atari/MadPascal/blibs/'}
 {$librarypath './sfx_engine/'}
-
 {$DEFINE ROMOFF}
-uses SFX_API,atari; //,hsc_utils;
+uses SFX_API, atari; //,hsc_utils;
 
 const
 {$i memory.inc}

@@ -416,7 +416,7 @@ begin
 					else
 						if (w<48) then
 							move(@sprites[sprofs[_w]+(w-32)],@pmg[y],(48-w));
-				if (w<32) then y:=y-1;
+				if (w<32) then dec(y);
 				if (w>32) and (w<48) then PCOL[2]:=48-w;
 			end;
 			i:=i+1; if (i>14) then i:=12;

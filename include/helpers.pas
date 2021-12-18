@@ -97,11 +97,13 @@ begin
 	isPMG:=true;
 end;
 
+(*
 procedure offPMG();
 begin
 	PMCTL:=0; GPRIOR:=%00000000;
 	isPMG:=false;
 end;
+*)
 
 procedure joy2key();
 const

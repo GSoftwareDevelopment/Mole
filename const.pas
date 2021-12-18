@@ -40,7 +40,7 @@ const
 	rightBound:array[0..13] of word = ($027,$04f,$077,$09f,$0c7,$0ef,$117,$13f,$167,$18f,$1b7,$1df,$207,$22f);
 
 	icon_blank 	= 0;
-	icon_cursor	= 2;
+//	icon_cursor	= 2;
 	icon_left		= 4;
 	icon_right	= 6;
 	icon_up			= 8;
