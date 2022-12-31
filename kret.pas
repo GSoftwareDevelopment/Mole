@@ -1,44 +1,50 @@
 // {$librarypath '~/Atari/MadPascal/blibs/'}
 {$librarypath './sfx_engine/'}
+{$librarypath './song/'}
 {$DEFINE ROMOFF}
 uses SFX_API, atari; //,hsc_utils;
 
+{$define no-title-music}
+{$define POLISH}
+
+{$r song/resource.rc}
+
 const
 {$i memory.inc}
+{$i types.pas}
 {$i const.pas}
 {$r resources.rc}
 {$i asm/dli.pas}
 {$i asm/block.pas}
-{$i types.pas}
 {$i include/helpers.pas}
 {$i include/scroll.pas}
 
 var
 	totalBlocks:byte;
-	moleX,moleY,				// mole position on screen (in characters)
-	mX,mY,							// mole position on screen (in pixels)
-	omY,								// old mole Y position (in pixels)
-	moleOfs,						// mole offset in buffer
+	moleX,moleY,			// mole position on screen (in characters)
+	mX,mY,					// mole position on screen (in pixels)
+	omY,					// old mole Y position (in pixels)
+	moleOfs,				// mole offset in buffer
 	moleSprite:byte;		// mole sprite number
-	moleState,					// mole current state
-	oMoleState,					//
+	moleState,				// mole current state
+	oMoleState,				//
 	blockState:byte;		// block fall speed in frames
-	newBlocks,					// indicate, how many new block is created after blocks fallen
-	blocksFallen:byte;	// indicate, haw many block have fallen
+	newBlocks,				// indicate, how many new block is created after blocks fallen
+	blocksFallen:byte;		// indicate, haw many block have fallen
 	vanishingBlockOfs:byte; //
 
 	status:^TStatus;		// in game status
-	gameOver,						// indicate for Game Over
-	breakGame:boolean;	// indicate for break game (press ESC key in main game)
+	gameOver,				// indicate for Game Over
+	breakGame:boolean;		// indicate for break game (press ESC key in main game)
 
 // timers
 	o_timer:byte;
-	moleTime,						// mole animation timer
-	moleFallenTime,			// The time after which the mole falls lower
+	moleTime:byte;			// mole animation timer
+	moleFallenTime:byte;	// The time after which the mole falls lower
 	blocksTime:byte;		// blocks drop timer
 
-	vanishTime:word;				// vanish block timer
-	vanishBreakTime:byte;		// block break timer
+	vanishTime:word;		// vanish block timer
+	vanishBreakTime:byte;	// block break timer
 	key:TKeys;
 
 procedure init();
@@ -48,11 +54,11 @@ begin
 // blocks vectors initialize
 	defvec:=BLOCKS_DEF_ADDR; lstvec:=BLOCKS_LIST_ADDR;
 // save old DL Interrupt
-  GetIntVec(iDLI, oldDLI);
+	GetIntVec(iDLI, oldDLI);
 // set video address to screen buffer
 	scradr:=SCREEN_BUFFER_ADDR;
 // SFX Lib initialize
-  SFX_StartVBL();
+  	SFX_StartVBL();
 
 // Keyboard
 	KRPDEL:=0;KEYREP:=0;

@@ -11,9 +11,6 @@ var
 	bestsCurrentPage:shortint;
 
 procedure createBests();
-var
-	i:byte;
-
 begin
 	bestEntry.nick:='';
 	bestEntry.score:='000000';
@@ -25,21 +22,21 @@ begin
 end;
 
 procedure updateBestsScreen();
-var i,y:byte;
+var y:byte;
 		place:string[2];
 
 begin
-	for i:=0 to maxBestsOnScreen-1 do
+	for j:=0 to maxBestsOnScreen-1 do
 	begin
 		move(@bests[i*sizeOf(TBestEntry)],@bestEntry,sizeOf(TBestEntry));
-		y:=4+i;
+		y:=4+j;
 		if (bestEntry._score=0) then
 		begin
 			putDCText(2,y,'-- -------- ------',false);
 		end
 		else
 		begin
-			str(i+1,place);
+			str(j+1,place);
 			putDCText(2,y,place,false);
 			putDCText(8,y,bestEntry.nick,false);
 			putDCText(26,y,bestEntry.score,false);
@@ -51,20 +48,19 @@ procedure updateBestsMode(active:boolean);
 const
 	modePos:array[0..2] of word = (4,6,9);
 
-var i:byte;
-
 begin
-	for i:=0 to 2 do
+	subStringSelect(string_bests,2);
+	for j:=0 to 2 do
 	begin
-		if (i=bestsMode) and (active) then
+		if (j=bestsMode) and (active) then
 		begin
-			move(@icons[icon_modesel+i*2],@scr[2+leftBound[modePos[i]]],2);
-			putDCString(5,modePos[i],string_bests,2+i,true);
+			move(@icons[icon_modesel+j*2],@scr[2+leftBound[modePos[j]]],2);
+			putDCString(5,modePos[j],true);
 		end
 		else
 		begin
-			move(@icons[icon_mode+i*2],@scr[2+leftBound[modePos[i]]],2);
-			putDCString(5,modePos[i],string_bests,2+i,false);
+			move(@icons[icon_mode+j*2],@scr[2+leftBound[modePos[j]]],2);
+			putDCString(5,modePos[j],false);
 		end;
 	end;
 end;
@@ -72,7 +68,13 @@ end;
 procedure updateScreen2Bests();
 begin
 	fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
-	putDCString(12,2,string_bests,0,false);
+	subStringSelect(string_bests,0);
+{$IFDEF ENGLISH}
+	putDCString(8,2,false);
+{$ENDIF}
+{$IFDEF POLISH}
+	putDCString(12,2,false);
+{$ENDIF}
 	updateBestsScreen();
 	setScroll(scroll_bestsList);
 end;
@@ -80,7 +82,8 @@ end;
 procedure updateScreen2Options();
 begin
 	fillchar(@scr[80],SCREEN_BESTS_SIZE-180,$00);
-	putDCString(11,2,string_bests,1,false);
+	subStringSelect(string_bests,1);
+	putDCString(11,2,false);
 	updateBestsMode(true);
 	setScroll(scroll_bestsMode);
 end;
@@ -90,8 +93,14 @@ begin
 	if (_timer-blinkTime>=10) then
 	begin
 		blinkTime:=_timer;
+{$IFDEF ENGLISH}
+		blinkIcon(5,2,icon_left);
+		blinkIcon(33,2,icon_right);
+{$ENDIF}
+{$IFDEF POLISH}
 		blinkIcon(9,2,icon_left);
 		blinkIcon(29,2,icon_right);
+{$ENDIF}
 		blinkIcon(38,4,icon_up);
 		blinkIcon(38,11,icon_down);
 		blinkState:=not blinkState;
@@ -163,22 +172,18 @@ begin
 end;
 
 procedure bestsScreen();
-var
-	i:byte;
-	ofs:word;
-
 begin
 	createBests();
 	setDL(DLIST_BESTS_ADDR,@dli_bests);
 // set character
 	CHBAS:=CHARSET1_PAGE;
-	ofs:=0;
+	scrofs:=0;
 	fillchar(@scr,SCREEN_BESTS_SIZE,$00);
-	for i:=0 to 19 do	begin	scr[ofs]:=$34; ofs:=ofs+1; scr[ofs]:=$35; ofs:=ofs+1;	end;
-	for i:=0 to 19 do	begin	scr[ofs]:=$38; ofs:=ofs+1; scr[ofs]:=$39; ofs:=ofs+1;	end;
+	for i:=0 to 19 do	begin	scr[scrofs]:=$34; scrofs:=scrofs+1; scr[scrofs]:=$35; scrofs:=scrofs+1;	end;
+	for i:=0 to 19 do	begin	scr[scrofs]:=$38; scrofs:=scrofs+1; scr[scrofs]:=$39; scrofs:=scrofs+1;	end;
 	fillchar(@scr[SCREEN_BESTS_SIZE-100],80,$3a);
-	ofs:=SCREEN_BESTS_SIZE-60;
-	for i:=0 to 19 do	begin	scr[ofs]:=$36; ofs:=ofs+1; scr[ofs]:=$37; ofs:=ofs+1;	end;
+	scrofs:=SCREEN_BESTS_SIZE-60;
+	for i:=0 to 19 do	begin	scr[scrofs]:=$36; scrofs:=scrofs+1; scr[scrofs]:=$37; scrofs:=scrofs+1;	end;
 	updateScreen2Bests();
 
 	onVideo();

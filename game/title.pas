@@ -2,32 +2,24 @@ var
 	title:array[0..SCR_TITLE_SIZE-1] of byte absolute SCR_TITLE_ADDR;
 	titleSh:array[0..SCR_TITLESHADOW_SIZE-1] of byte absolute SCR_TITLESHADOW_ADDR;
 
-procedure moveZero(src,dst:pointer; size:byte);
-var
-	srcptr:word absolute $e0;
-	dstptr:word absolute $e2;
-	count:byte absolute $e4;
-
+procedure moveZero(src,dst:pointer; size:byte); register;
 begin
-	if size=0 then exit;
-	srcptr:=word(src); dstptr:=word(dst); count:=size;
 	asm {
-			ldy #00
+			ldy size
+			beq ext
 		lp:
-			lda (srcptr),y
-			beq nxt
-			sta (dstptr),y
+			dey
+			bmi ext
+			lda (src),y
+			beq lp
+			sta (dst),y
 		nxt:
-			iny
-			cpy count
 			bne lp
+		ext:
 	};
 end;
 
 procedure SlideLeft(y:byte; ln:word; ofs:byte);
-var
-	txtofs,scrofs:word;
-
 begin
 	scrofs:=leftBound[y]; //y shl 5+y shl 3; // oblicz linię ekranu
 	txtofs:=ln shl 6; // oblicz linię tekstu
@@ -48,9 +40,6 @@ begin
 end;
 
 procedure SlideRight(y:byte; ln:word; ofs:byte);
-var
-	txtofs,scrofs:word;
-
 begin
 	// y:=y+1;
 	scrofs:=rightBound[y]-ofs;// y shl 5+y shl 3-ofs; // oblicz linię ekranu
@@ -71,7 +60,7 @@ end;
 
 procedure TitleIn();
 var
-	x,j,i:byte;
+	x:byte;
 	ofs,outofs:word;
 
 begin
@@ -116,20 +105,11 @@ begin
 	move(@logos[48],@pmg[$300+LOGOS_YPOS],16);
 end;
 
-procedure titleSetColor();
-begin
-	COLPF[0]:=$a8;
-	COLPF[1]:=$ca;
-	COLPF[2]:=$94;
-	COLPF[3]:=$46;
-	COLPF[4]:=$00;
-end;
-
 procedure titleInScreen();
 begin
 	initPMG();
 	setDL(DLIST_TITLE_ADDR,@dli_title);
-	titleSetColor();
+	move(colors_title,COLPF,5);
 // set character
 	CHBAS:=CHARSET1_PAGE;
 	fillchar(@scr,SCREEN_TITLE_SIZE,0);
@@ -139,8 +119,9 @@ begin
 
 	onVideo();
 	setLogos();
-	// SFX_PlaySONG(26*4);
-
+{$ifndef no-title-music}
+	SFX_PlaySONG(26*4);
+{$endif}
 	TitleIn();
 
 	gameOver:=true;
@@ -150,7 +131,7 @@ procedure titleScreen();
 begin
 	initPMG();
 	setDL(DLIST_TITLE_ADDR,@dli_title);
-	titleSetColor();
+	move(colors_title,COLPF,5);
 // set character
 	CHBAS:=CHARSET1_PAGE;
 	fillchar(@scr,SCREEN_TITLE_SIZE,0);

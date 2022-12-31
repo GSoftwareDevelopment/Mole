@@ -10,23 +10,25 @@ begin
 		move(@icons[icon_blank],@scr[x+leftBound[y]],2);
 end;
 
-procedure updateHistoryPage(page,startY,lines:byte);
-var
-	ln,sln:byte;
+procedure updateHistoryPage(page:byte);
+var startY,lines:byte;
 
 begin
 	fillchar(@scr[80],SCREEN_HISTORY_SIZE-180,$00);
-	for ln:=0 to lines do
+	subStringSelect(string_history[page][0],0);
+	startY:=string_history[page][1];
+	lines:=string_history[page][2];
+	while lines>0 do
 	begin
-		sln:=stringDCLen(string_history[page],ln) shr 1;
-		putDCString(20-sln,startY+ln,string_history[page],ln,false);
+		page:=stringDCLen shr 1;
+		putDCString(20-page,startY,false);
+		inc(startY); dec(lines);
 	end;
 end;
 
 procedure historyScreen();
 var
 	key:TKeys;
-	i:byte;
 	ofs:word;
 
 	procedure wait4controller();
@@ -63,12 +65,7 @@ begin
 
 	for i:=0 to 3 do
 	begin
-		case i of
-			0: updateHistoryPage(0,3,6);
-			1: updateHistoryPage(1,5,3);
-			2: updateHistoryPage(2,5,3);
-			3: updateHistoryPage(3,2,9);
-		end;
+		updateHistoryPage(i);
 		wait4controller();
 		key:=TKeys(kbcode); kbcode:=255;
 		case key of

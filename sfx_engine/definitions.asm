@@ -5,32 +5,32 @@ skctl       = $D20F
 
 ; CONSTANTS - offsets in channels registers table
 
-            icl 'sfx_engine_const.inc'
+  icl 'sfx_engine_const.inc'
 
 ; VARIABLES - PAGE ZERO
 .ifdef MAIN.@DEFINES.SFX_SYNCAUDIOOUT
-AUDIOBUF          = AUDIO_BUFFER_ADDR      ; 8 bytes audio buffer for sync output
+AUDIOBUF          = $E8      ; 8 bytes audio buffer for sync output
 .endif
 
-SONG_TEMPO        = SFX_REGISTERS+$0      ; SONG Tempo
-SONG_TICK_COUNTER = SFX_REGISTERS+$1      ; SONG tick counter
-SONG_Ofs          = SFX_REGISTERS+$2      ;
-SONG_Rep          = SFX_REGISTERS+$3      ;
+SONG_TEMPO        = $F0      ; SONG Tempo
+SONG_TICK_COUNTER = $F1      ; SONG tick counter
+SONG_Ofs          = $F2      ;
+SONG_Rep          = $F3      ;
 
-dataPtr           = SFX_REGISTERS+$4      ; SFX or TAB data pointer (2 bytes)
+dataPtr           = $F4      ; SFX or TAB data pointer (2 bytes)
 
-TABOrder          = SFX_REGISTERS+$7      ; TAB Order
-TABParam          = SFX_REGISTERS+$8      ; TAB Parameter (Note/Freq/Position)
+TABOrder          = $F7      ; TAB Order
+TABParam          = $F8      ; TAB Parameter (Note/Freq/Position)
 
-sfxNoteOfs        = SFX_REGISTERS+$6      ; SFX Note Table offset (1 byte)
-chnNote           = SFX_REGISTERS+$7      ; SFX Note
-chnFreq           = SFX_REGISTERS+$8      ; SFX Frequency
+sfxNoteOfs        = $F6      ; SFX Note Table offset (1 byte)
+chnNote           = $F7      ; SFX Note
+chnFreq           = $F8      ; SFX Frequency
 
-chnMode           = SFX_REGISTERS+$9      ; SFX Modulation Mode
-chnModVal         = SFX_REGISTERS+$A      ; SFX Modulator
-chnCtrl           = SFX_REGISTERS+$B      ; SFX Control (distortion & volume)
+chnMode           = $F9      ; SFX Modulation Mode
+chnModVal         = $FA      ; SFX Modulator
+chnCtrl           = $FB      ; SFX Control (distortion & volume)
 
-_regTemp          = SFX_REGISTERS+$C
+_regTemp          = $FC
 
 
 ; CONSTANTS

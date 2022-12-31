@@ -2,22 +2,18 @@ var
 	menuOpt:byte = 0;
 
 procedure updateMenu();
-// const
-//	sofs:array[0..2] of word = (586,606,626);
-
-var
-	i:byte;
-	sofs:word;
+const
+{$IFDEF ENGLISH}
+	sofs:array[0..2] of word = (586,604,625);
+{$ENDIF}
+{$IFDEF POLISH}
+	sofs:array[0..2] of word = (586,606,626);
+{$ENDIF}
 
 begin
-	sofs:=586;
 	for i:=0 to 2 do
 	begin
-		if (i=menuOpt) then
-			putSCString(sofs(*[i]*),string_menu,i,1)
-		else
-			putSCString(sofs(*[i]*),string_menu,i,0);
-		inc(sofs,20);
+		putSCString(sofs[i],string_menu,i,byte(i=menuOpt));
 	end;
 end;
 

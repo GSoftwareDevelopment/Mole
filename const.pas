@@ -1,6 +1,7 @@
+const
 	stateStop		= %00000000;	// mole do nothing
 	stateEat		= %10000000;	// mole eat block
-	stateFallen = %01000000;	// mole fallen low
+	stateFallen		= %01000000;	// mole fallen low
 	stateJump		= %00100000;	// mole is jump
 	stateMove		= %00010000;	// mole in move
 
@@ -8,10 +9,10 @@
 	dirRight		= %00001000;	// 1-right
 
 	maskState		= %01110000;	// state mask
-  maskDir			= %00001000;	// mole direction mask:
+  	maskDir			= %00001000;	// mole direction mask:
 	maskPhase		= %00000111;  // phase mask
 
-	moleSpritePhases:array[0..3,0..3] of byte = (
+	moleSpritePhases:array[0..3, 0..3] of byte = (
 		(9,3,255,255),	// %00000phs do nothing phases (for left and right)
 		(6,7,8,7),			// %00110phs moving right phases
 		(0,1,2,1),			// %00100phs moving left phases
@@ -41,11 +42,11 @@ const
 
 	icon_blank 	= 0;
 //	icon_cursor	= 2;
-	icon_left		= 4;
+	icon_left	= 4;
 	icon_right	= 6;
-	icon_up			= 8;
-	icon_down		= 10;
-	icon_mode		= 12;
+	icon_up		= 8;
+	icon_down	= 10;
+	icon_mode	= 12;
 	icon_modesel= 18;
 
 	icons:array[0..23] of byte = (
@@ -63,28 +64,55 @@ const
 	250,251		// net+invers
 	);
 
-	scroll_title		= 0;
+	scroll_title	= 0;
 	scroll_history	= 1;
 	scroll_bestsList= 2;
 	scroll_bestsMode= 3;
 
+{$IFDEF ENGLISH}
 	scrollSizes:array[0..3] of smallint=(
-		$B4,
+		$AC,
+		$22,
+		$34,
+		$35
+	);
+{$ENDIF}
+{$IFDEF POLISH}
+	scrollSizes:array[0..3] of smallint=(
+		$B5,
 		$32,
 		$3B,
 		$37
 	);
+{$ENDIF}
 
 	scrollScreenOfs:array[0..3] of word =(
-		SCREEN_TITLE_SIZE-20,
-		SCREEN_HISTORY_SIZE-20,
-		SCREEN_BESTS_SIZE-20,
-		SCREEN_BESTS_SIZE-20
+		SCREEN_ADDR+SCREEN_TITLE_SIZE-20,
+		SCREEN_ADDR+SCREEN_HISTORY_SIZE-20,
+		SCREEN_ADDR+SCREEN_BESTS_SIZE-20,
+		SCREEN_ADDR+SCREEN_BESTS_SIZE-20
 	);
 
 	string_menu			= 0;
 	string_bests		= 1;
-	string_history	: array[0..3] of byte = (2,3,4,5);
-	string_ready		= 6;
+{$IFDEF ENGLISH}
+	string_history	: array[0..3,0..2] of byte = (
+		(2, 3 ,7),
+		(3, 5 ,3),
+		(4, 4 ,6),
+		(5, 2 ,9)
+	);
+{$ENDIF}
+{$IFDEF POLISH}
+	string_history	: array[0..3,0..2] of byte = (
+		(2, 3 ,7),
+		(3, 5 ,3),
+		(4, 5 ,4),
+		(5, 2 ,9)
+	);
+{$ENDIF}
+	string_ready	= 6;
 	string_gameover	= 7;
 	string_topstatus= 8;
+
+	colors_title : array[0..4] of byte = ($a8, $ca, $94, $46, $00);

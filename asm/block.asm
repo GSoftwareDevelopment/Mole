@@ -26,20 +26,8 @@ _RAND = $d20a;
 ;
 ;
 
-				dta a(drawBlock)
-				dta a(testBlock)
-				dta a(clearBlock)
-				dta a(dropBlocks)
-				dta a(pointTest)
-				dta a(shuffleBlock)
-				dta a(randomBottomBlock)
-
-;
-;
-;
-
 drawBlock							; rusuj blok
-				 jsr _calc_adr
+		 jsr _calc_adr
 
 ; ustal maske koloru
          ldy Color
@@ -75,7 +63,7 @@ DrawSkip iny
 ;
 
 testBlock								; Kolizja bloku
-				 jsr _calc_adr
+		 jsr _calc_adr
 
          lda #0
          sta fr0H
@@ -120,7 +108,7 @@ TestEnd  sta fr0L
          rts
 
 clearBlock								; kasuj blok
-				 jsr _calc_adr
+		 jsr _calc_adr
 
          ldx BlockH
 
@@ -228,7 +216,7 @@ _TB      asl @      ;razy 4
          sbc #4     ;zmniejsz o 4
 
 PtTstLoop
-				 sta TB     ; zapisz TB
+		 sta TB     ; zapisz TB
          tay
 
 ; pobierz dane bloku
@@ -429,8 +417,8 @@ findNext sec
          iny
          lda (lstvec),y
 ;				.print "break at ",*
-				 cmp #17				; wybieraj TYLKO bloki, nie "coinsy"!
-				 beq findNext
+		 cmp #17				; wybieraj TYLKO bloki, nie "coinsy"!
+		 beq findNext
 
          sta Block
          asl @
@@ -477,7 +465,7 @@ inRange  tax
 
 ; koniec procedury, zwrócenie offsetu bloku
 endDelOne
-				 sta fr0L
+		 sta fr0L
          lda #0
          sta fr0H
 
@@ -489,7 +477,7 @@ endDelOne
 
 
 _calc_adr 												; oblicz adres ekranu
-				 lda 88
+		 lda 88
          sta scrvec
          lda 89
          sta scrvec+1
@@ -498,7 +486,7 @@ _calc_adr 												; oblicz adres ekranu
 
          clc
          ldx Ypos
-         lda vadr,x
+         lda MAIN.ADR.ROWOFS,x
          adc scrvec
          sta scrvec
 
@@ -514,7 +502,7 @@ _calc_adr 												; oblicz adres ekranu
 
 
 _calc_dadr										; Wylicz adres definicji klocka
-				 lda Block
+		 lda Block
          asl @
          asl @
          asl @
@@ -541,7 +529,7 @@ end_calc rts
 
 
 _incadr														; zwieksz adres bloku o jego szer.
-				 clc
+		 clc
          lda tmpadr
          adc BlockW
          sta tmpadr
@@ -555,8 +543,8 @@ _incadr														; zwieksz adres bloku o jego szer.
 
 end_upadr rts
 
-vadr		 dta $00,$14,$28,$3c,$50,$64,$78,$8c,$a0,$b4,$c8,$dc
-mask		 dta %00000000, %01000000, %10000000, %11000000
+; vadr	 dta $00,$14,$28,$3c,$50,$64,$78,$8c,$a0,$b4,$c8,$dc
+mask	 dta %00000000, %01000000, %10000000, %11000000
 ; tablica dla znalezionych bloków
 bttmBlks dta $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-				 dta $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+		 dta $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00

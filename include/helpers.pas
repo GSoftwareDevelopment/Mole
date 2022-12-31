@@ -66,8 +66,8 @@ end;
 procedure setDL(dl_set:word; dliPtr:pointer);
 begin
 	offVideo();
-	NMIEN:=%01000000; // turn off DLI
 	delay(5);
+	NMIEN:=%01000000; // turn off DLI
 	if dliPtr<>nil then
 	begin
 		SetIntVec(iDLI, dliPtr);
@@ -131,22 +131,30 @@ begin
 	end;
 end;
 
-function stringLen(sId,subSId:byte):byte;
-var
-	txtofs:word;
+// strings
 
+var
+	txtofs,scrofs:word;
+	ch:byte;
+	i,j:byte;
+
+procedure subStringSelect(sID,subSId:Byte);
 begin
 	txtofs:=strings_pointers[sId]-STRINGS_DATA_ADDR;
-	result:=0;
-
 	// substring seek
 	while subSId>0 do
 	begin
 		while strings_data[txtofs]<>$ff do txtofs:=txtofs+1;
 		subSId:=subSId-1; txtofs:=txtofs+1;
 	end;
+end;
 
-	// string put to screen;
+function stringLen(sId,subSId:byte):byte;
+begin
+	result:=0;
+	subStringSelect(sId,subSId);
+
+	// counting length
 	while strings_data[txtofs]<>$ff do
 	begin
 		result:=result+1; txtofs:=txtofs+1;
@@ -154,21 +162,9 @@ begin
 end;
 
 procedure putSCString(scrofs:word; sId,subSId:byte; color:byte);
-var
-	ch:byte;
-	txtofs:word;
-
 begin
-	txtofs:=strings_pointers[sId]-STRINGS_DATA_ADDR;
 	color:=color shl 7;
-
-	// substring seek
-	while subSId>0 do
-	begin
-		while strings_data[txtofs]<>$ff do txtofs:=txtofs+1;
-		subSId:=subSId-1; txtofs:=txtofs+1;
-	end;
-
+	subStringSelect(sId,subSId);
 	// string put to screen;
 	while strings_data[txtofs]<>$ff do
 	begin
@@ -177,21 +173,12 @@ begin
 	end;
 end;
 
-function stringDCLen(sId,subSId:byte):byte;
+function stringDCLen():byte;
 var
-	txtofs:word;
+  otxtofs:word;
 
 begin
-	txtofs:=strings_pointers[sId]-STRINGS_DATA_ADDR;
-	result:=0;
-
-	// substring seek
-	while subSId>0 do
-	begin
-		while strings_data[txtofs]<>$ff do txtofs:=txtofs+1;
-		subSId:=subSId-1; txtofs:=txtofs+1;
-	end;
-
+	result:=0; otxtofs:=txtofs;
 	while strings_data[txtofs]<>$ff do
 	begin
 		ch:=strings_data[txtofs];
@@ -199,28 +186,21 @@ begin
 			inc(result);
 		inc(result); inc(txtofs);
 	end;
+	txtofs:=otxtofs;
 end;
 
-procedure putDCString(x,y:byte; sId,subSId:byte; inv:boolean);
+procedure putDCString(x,y:byte; inv:boolean);
 var
-	ch,color:byte;
-	txtofs:word;
-	scrofs:word;
+	color:byte;
 
 begin
 	scrofs:=leftBound[y]+x;
-	txtofs:=strings_pointers[sId]-STRINGS_DATA_ADDR;
 	if (inv) then color:=$80 else color:=$00;
-	// substring seek
-	while subSID>0 do
-	begin
-		while strings_data[txtofs]<>$ff do txtofs:=txtofs+1;
-		subSId:=subSId-1; txtofs:=txtofs+1;
-	end;
+
 	// string put to screen;
 	while strings_data[txtofs]<>$ff do
 	begin
-		ch:=strings_data[txtofs]; txtofs:=txtofs+1;
+		ch:=strings_data[txtofs]; inc(txtofs);
 		if (ch=$00) or (ch=$0e) or (ch=$0f) or (ch=$1a) then
 		begin
 			if (ch=$00) then ch:=$00; // space
@@ -236,38 +216,36 @@ begin
 		scr[scrofs]:=ch or color;
 		inc(scrofs);
 	end;
+	inc(txtofs);
 end;
 
 procedure putSCText(scrofs:word; s:string; color:byte);
-var
-	ch:byte;
-	txtofs:byte;
+const
+	_color:array[0..3] of byte = ($00,$40,$80,$c0);
 
 begin
-	color:=color shl 6;
+	color:=_color[color];
 	// string put to screen;
-	txtofs:=1;
-	while txtofs<=length(s) do
+	i:=1;
+	while i<=length(s) do
 	begin
-		ch:=byte(s[txtofs])-32; txtofs:=txtofs+1;
+		ch:=byte(s[i])-32; i:=i+1;
 		scr[scrofs]:=ch or color; scrofs:=scrofs+1;
 	end;
 end;
 
 procedure putDCText(x,y:byte; s:string; inv:boolean);
 var
-	ch,color:byte;
-	txtofs:byte;
-	scrofs:word;
+	color:byte;
 
 begin
 	scrofs:=leftBound[y]+x;
 	if (inv) then color:=$80 else color:=$00;
 	// string put to screen;
-	txtofs:=1;
-	while txtofs<=length(s) do
+	i:=1;
+	while i<=length(s) do
 	begin
-		ch:=byte(s[txtofs])-32; txtofs:=txtofs+1;
+		ch:=byte(s[i])-32; i:=i+1;
 		ch:=ch shl 1+ch and $80;
 		scr[scrofs]:=ch or color; scrofs:=scrofs+1; ch:=ch+1;
 		scr[scrofs]:=ch or color; scrofs:=scrofs+1;

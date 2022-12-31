@@ -14,11 +14,11 @@ var
 	Block		:byte absolute $7a;
 	Color		:byte absolute $7b;
 
-	defvec	:word absolute $62; // 2 bytes
-	lstvec	:word absolute $64; // 2 bytes
+	defvec		:word absolute $62; // 2 bytes
+	lstvec		:word absolute $64; // 2 bytes
 
-	blocksList:array[0..255] of byte absolute BLOCKS_LIST_ADDR;
-	blocksDef:array[0..255] of byte absolute BLOCKS_DEF_ADDR;
+	blocksList	:array[0..255] of byte absolute BLOCKS_LIST_ADDR;
+	blocksDef	:array[0..255] of byte absolute BLOCKS_DEF_ADDR;
 
 	lastDefinedBlock:byte = DefinedBlocks;
 
@@ -30,7 +30,7 @@ begin
 	Block:=_Block;
 	Color:=_Color;
 	asm {
-		jsr BLOCK_ASM_ADDR+$000e
+		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.DRAWBLOCK // BLOCK_ASM_ADDR+$000e
 	};
 end;
 
@@ -40,7 +40,7 @@ end;
 // 	Ypos:=_Ypos;
 // 	Block:=_Block;
 // 	asm {
-// 		jsr BLOCK_ASM_ADDR+$0032
+// 		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.TESTBLOCK // BLOCK_ASM_ADDR+$0032
 // 	};
 // 	result:=boolean(fr0); // zwrot, prawda, jeżeli testowany blok koliduje
 // end;
@@ -51,7 +51,7 @@ begin
 	Ypos:=_Ypos;
 	Block:=_Block;
 	asm {
-		jsr BLOCK_ASM_ADDR+$0065
+		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.CLEARBLOCK // BLOCK_ASM_ADDR+$0065
 	};
 end;
 
@@ -59,7 +59,7 @@ function DropBlocks(_totalBlocks:Byte):Byte;
 begin
 	tb:=_totalBlocks;
 	asm {
-		jsr BLOCK_ASM_ADDR+$0082
+		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.DROPBLOCKS // BLOCK_ASM_ADDR+$0082
 	};
 	result:=byte(fr0); // zwrot, ilość osuniętych bloków
 end;
@@ -70,7 +70,7 @@ begin
 	testY:=_Y;
 	tb:=_totalBlocks;
 	asm {
-		jsr BLOCK_ASM_ADDR+$00d4
+		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.POINTTEST // BLOCK_ASM_ADDR+$00d4
 	};
 	result:=byte(fr0); // zwrot, numer bloku spełniającego test
 end;
@@ -80,7 +80,7 @@ begin
 	Ypos:=_Ypos;
 	tb:=_totalBlocks;
 	asm {
-		jsr BLOCK_ASM_ADDR+$0153
+		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.SHUFFLEBLOCK // BLOCK_ASM_ADDR+$0153
 	};
 	result:=byte(fr0); // zwrot, ilość nowych bloków
 end;
@@ -89,7 +89,7 @@ function RandomBottomBlock(_totalBlocks:Byte):byte;
 begin
 	tb:=_totalBlocks;
 	asm {
-		jsr BLOCK_ASM_ADDR+$01ac
+		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.RANDOMBOTTOMBLOCK // BLOCK_ASM_ADDR+$01ac
 	};
 	result:=byte(fr0); // zwrot, offset wylosowanego bloku, lub $ff, jeżeli takiego bloku nie ma
 end;

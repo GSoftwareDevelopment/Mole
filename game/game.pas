@@ -1,3 +1,8 @@
+procedure putBlocksOnScreen;
+begin
+	move(@buffer,@scr[40],240);// draw blocks on screen
+end;
+
 procedure updateTopStatus;
 var
   temp:String[6];
@@ -12,9 +17,9 @@ begin
 end;
 
 procedure updateBottomStatus;
-var a,b,i:byte;
-		ofs1,ofs2:word;
-		clev:integer;
+var a,b:byte;
+	ofs1,ofs2:word;
+	clev:integer;
 
 begin
 	clev:=trunc(((status.blocks-status.oldNextLevel)/status.nextLevel)*34);
@@ -29,16 +34,16 @@ begin
 	end;
 end;
 
-procedure updateMolePosition();
 var
 	yOfs:byte;
 	sprOfs:word;
 
+procedure updateMolePosition();
 begin
 	if (mY<>omY) then
 	begin
 		sprOfs:=moleSprite shl 4;
-		yOfs:=16+mY;
+		yOfs:=12+mY;
 
 		fillchar(@pmg,256,0);
 //		fillchar(@pmg,yOfs,0);
@@ -57,15 +62,11 @@ begin
 end;
 
 procedure setMoleSprite(sprNo:byte);
-var
-	sprOfs:word;
-	yOfs:byte;
-
 begin
 	if (sprNo=moleSprite) then exit;
 	moleSprite:=sprNo;
 	sprOfs:=sprNo shl 4;
-	yOfs:=16+omY;
+	yOfs:=12+omY;
 	move(@sprites[sprOfs],@pmg[yOfs],16);
 	move(@sprites[sprOfs+$120],@pmg[$100+yOfs],16);
 end;
@@ -75,7 +76,7 @@ end;
 
 procedure initNewGame();
 var
-	i,newBlocks:byte;
+	newBlocks:byte;
 	dx:shortint;
 
 begin
@@ -86,6 +87,7 @@ begin
 	fillchar(@buffer[221],18,$3d);
 
 // generate blocks
+	lastDefinedBlock:=DefinedBlocks;
 	totalBlocks:=0;
 	for i:=0 to 10 do
 	begin
@@ -173,7 +175,7 @@ begin
 					mX:=mX-2;
 					setMoleSprite(moleSpritePhases[1][phase]);
 					updateMolePosition();
-					inc(phase); if (phase and 3=2) then SFX_Freq(3,50,sfx_moleMove);
+					inc(phase);
 				end
 				else
 				begin
@@ -190,7 +192,7 @@ begin
 					mX:=mX+2;
 					setMoleSprite(moleSpritePhases[2][phase]);
 					updateMolePosition();
-					inc(phase); if (phase and 3=2) then SFX_Freq(3,50,sfx_moleMove);
+					inc(phase);
 				end
 				else
 				begin
@@ -200,6 +202,7 @@ begin
 					newState:=stateStop;
 				end;
 			end;
+			if (phase and 3=2) then SFX_Freq(3,50,sfx_moleMove);
 			moleFallenTime:=50; // globalTime;
 		end;
 
@@ -323,7 +326,7 @@ begin
 	else
 		SFX_Freq(3,40,sfx_choice);
 
-	move(@buffer,@scr[40],240);
+	putBlocksOnScreen;
 
 	if (points=0) then points:=1;
 	points:=points*(12-moleY);
@@ -341,9 +344,6 @@ end;
 
 //
 procedure moleTest();
-var
-	ch:byte;
-
 begin
 	moleX:=mx shr 3; moleY:=my shr 4;
 
@@ -357,7 +357,7 @@ begin
 end;
 
 procedure GameOverScreen();
-var i,len:byte;
+var len:byte;
 
 begin
 	setDL(DLIST_GAMEOVER_ADDR,@dli_gameover);
@@ -383,7 +383,7 @@ begin
 end;
 
 procedure moleDie();
-var i,w,_w:byte;
+var w,_w:byte;
 	y:word;
 	dieTime:byte;
 	anmTime:byte;
@@ -465,7 +465,7 @@ begin
 				blockState:=blockState and (not stateDropBlocks)
 			else
 			begin
-				move(@buffer,@scr[40],240);
+				putBlocksOnScreen;
 				blocksTime:=Status.blockFallSpeed;
 			end;
 
@@ -518,7 +518,7 @@ begin
 			ClearBlock(Xpos,Ypos,Block);
 			removeBlockDef(Block);
 
-			move(@buffer,@scr[40],240);
+			putBlocksOnScreen;
 			move(@blocksList[vanishingBlockOfs+4],@blocksList[vanishingBlockOfs],(totalBlocks shl 2)-vanishingBlockOfs);
 			totalBlocks:=totalBlocks-1;
 			blockState:=stateDropBlocks+stateNewBlocks;
@@ -536,7 +536,7 @@ begin
 				BreakBlock(vanishingBlockOfs shr 2);
 				vanishBreakTime:=Status.breakSpeed;
 				DrawBlock(Xpos,Ypos,Block,Color);
-				move(@buffer,@scr[40],240);
+				putBlocksOnScreen;
 			End;
 		end;
 	end;
@@ -544,28 +544,28 @@ end;
 
 procedure gameLoop();
 begin
-		o_timer:=_timer;
-		repeat
-			if _timer-o_timer>0 then
-			begin
-				o_timer:=_timer;
-				if moleTime>0 then dec(moleTime);
-				if moleFallenTime>0 then dec(moleFallenTime);
-				if blocksTime>0 then dec(blocksTime);
-				if vanishTime>0 then dec(vanishTime);
-				if vanishBreakTime>0 then dec(vanishBreakTime);
-			end;
-			moleControl();
-			moleMove();
-			if (moleState and stateEat=0) and
-				 (moleState and maskPhase=2) then moleTest();
-			if (blockState and (stateDropBlocks+stateNewBlocks)<>0) then blockTest();
-			blockVanishTest();
-		until gameOver or breakGame;
+	o_timer:=_timer;
+	repeat
+		if _timer-o_timer>0 then
+		begin
+			o_timer:=_timer;
+			if moleTime>0 then dec(moleTime);
+			if moleFallenTime>0 then dec(moleFallenTime);
+			if blocksTime>0 then dec(blocksTime);
+			if vanishTime>0 then dec(vanishTime);
+			if vanishBreakTime>0 then dec(vanishBreakTime);
+		end;
+		moleControl();
+		moleMove();
+		if (moleState and stateEat=0) and
+			(moleState and maskPhase=2) then moleTest();
+		if (blockState and (stateDropBlocks+stateNewBlocks)<>0) then blockTest();
+		blockVanishTest();
+	until gameOver or breakGame;
 end;
 
 procedure ReadyScreen();
-var i,len:byte;
+var len:byte;
 
 begin
 
@@ -599,7 +599,7 @@ begin
 // prepare screen
 	fillchar(@scr,280,0);
 	move(@statusbar,@scr[SCREEN_GAME_SIZE-SCR_STATUSBAR_SIZE],SCR_STATUSBAR_SIZE);
-	move(@buffer,@scr[40],240);
+	putBlocksOnScreen;
 
 	putSCString(2,string_topstatus,0,0);
 	putSCString(12,string_topstatus,1,0);

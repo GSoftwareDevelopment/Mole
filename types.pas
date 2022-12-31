@@ -7,8 +7,8 @@ type
 		oldNextLevel:word;
 		blockFallSpeed:shortint;
 		blockVanishingTime:word;	// Time after which the block disappears
-		vanishWarning:word;				// Time after which thw Warning block flash
-		breakSpeed:word;					// speed of block break before vanish
+		vanishWarning:word;			// Time after which thw Warning block flash
+		breakSpeed:word;			// speed of block break before vanish
 	end;
 
 // 	PBestEntry=^TBestEntry;
@@ -17,6 +17,12 @@ type
  		score:string[6];
  		_score:cardinal;
  	end;
+
+	THistoryPage=record
+		nStr:Byte;
+		startY:Byte;
+		lines:Byte;
+	end;
 
 	TKeys = (
 		key_Left = 6,

@@ -8,16 +8,24 @@ var
 	scrollScrOfs:word;
 	scrollLn:shortint;
 	scrollScrShift:shortint;
-	scrollShift:smallint;
-	scrollSize:smallint;
+	scrollShift:byte;
+	scrollSize:byte;
+
+procedure resetScroll;
+begin
+	cFineScroll:=0;
+	cScrollPos:=0;
+	scrollLn:=0;
+	scrollShift:=0;
+	scrollScrShift:=18;
+	fillchar(pointer(scrollScrOfs),18,0);
+end;
 
 procedure setScroll(id:byte);
 begin
 	scroll:=scrollTexts[id];
 	scrollSize:=scrollSizes[id];
 	scrollScrOfs:=scrollScreenOfs[id];
-	cFineScroll:=0; cScrollPos:=0;
-	fillchar(@scr[scrollScrOfs],18,0);
 end;
 
 procedure scroll_tick();
@@ -42,20 +50,16 @@ begin
 			begin
 				scrollLn:=scrollSize-scrollShift;
 				if (scrollLn>0) then
-					fillchar(@scr[scrollScrOfs+scrollLn],18-scrollLn,0)
+					fillchar(pointer(scrollScrOfs+scrollLn),18-scrollLn,0)
 				else
-				begin
-					cScrollPos:=0; scrollLn:=0; cFineScroll:=0;
-					scrollShift:=0; scrollScrShift:=18;
-					fillchar(@scr[scrollScrOfs],18,0);
-				end;
+					resetScroll;
+			end;
+			if (scrollLn>0) then
+			begin
+				move(pointer(scroll+scrollShift),pointer(scrollScrOfs+scrollScrShift),scrollLn);
 			end;
 		end;
 
 		HSCROLL:=cFineScroll;
-		if (scrollLn>0) then
-		begin
-			move(pointer(scroll+scrollShift),@scr[scrollScrOfs+scrollScrShift],scrollLn);
-		end;
 	end;
 end;
