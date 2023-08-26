@@ -69,7 +69,7 @@ colpf2s	=	$02C6	; rejestr-cie? COLPF2
 colpf3s	=	$02C7	; rejestr-cie? COLPF3
 colbaks	=	$02C8	; rejestr-cie? COLBAK
 
-dsctln	=	$02D5	; (2) Disk sector size register; default of 128 ($80) Bytes
+dsctln	=	$02D5	; (2) Disk sector size register; default of 128 ($80) bytes
 dvstat	=	$02EA	; (4) device status
 
 crsinh	=	$02F0	; znacznik widoczno?ci kursora

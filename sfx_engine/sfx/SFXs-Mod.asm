@@ -61,7 +61,7 @@ force_DFD_Mod
 	; there is no concept of note or SFX frequency.
 	; This mode is useful for sound synthesis.
 	; The end of the definition cannot be marked, hence SFX in this mode should have
-	; a full length of 128 bytes.
+	; a full length of 128 Bytes.
 	; The definition is looped!
 .endif
 

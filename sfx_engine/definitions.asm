@@ -9,7 +9,7 @@ skctl       = $D20F
 
 ; VARIABLES - PAGE ZERO
 .ifdef MAIN.@DEFINES.SFX_SYNCAUDIOOUT
-AUDIOBUF          = $E8      ; 8 bytes audio buffer for sync output
+AUDIOBUF          = $E8      ; 8 Bytes audio buffer for sync output
 .endif
 
 SONG_TEMPO        = $F0      ; SONG Tempo
@@ -17,12 +17,12 @@ SONG_TICK_COUNTER = $F1      ; SONG tick counter
 SONG_Ofs          = $F2      ;
 SONG_Rep          = $F3      ;
 
-dataPtr           = $F4      ; SFX or TAB data pointer (2 bytes)
+dataPtr           = $F4      ; SFX or TAB data Pointer (2 Bytes)
 
 TABOrder          = $F7      ; TAB Order
 TABParam          = $F8      ; TAB Parameter (Note/Freq/Position)
 
-sfxNoteOfs        = $F6      ; SFX Note Table offset (1 byte)
+sfxNoteOfs        = $F6      ; SFX Note Table offset (1 Byte)
 chnNote           = $F7      ; SFX Note
 chnFreq           = $F8      ; SFX Frequency
 

@@ -1,7 +1,7 @@
 _star = $DB
 _diamond = $DC
 
-scrolls_pointers
+scrolls_Pointers
 		dta a(titleScroll)
 		dta a(historyScroll)
 		dta a(bestsListScroll);
@@ -47,5 +47,5 @@ bestsModeScroll
 			d' fire/enter WYB(R ', _diamond, d' lewo LISTA'
 		.print "BESTS-MODE SCROLL : ", *-bestsModeScroll
 
-		.print "SCROLLS SIZE: ", *-scrolls_pointers
+		.print "SCROLLS SIZE: ", *-scrolls_Pointers
 

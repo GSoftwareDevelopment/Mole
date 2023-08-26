@@ -1,50 +1,50 @@
 uses crt,atari;
 
-{$r Krecik - zdech³.rc}
+{$r Krecik - zdechï¿½.rc}
 
 const
 	scr = $B200;
 
 	fnt0 = $B800;
 
-	dlist: array [0..34] of byte = (
+	dlist: array [0..34] of Byte = (
 		$C4,lo(scr),hi(scr),
 		$84,$84,$84,$84,$84,$84,$84,$84,
 		$84,$84,$84,$84,$84,$84,$84,$84,
 		$84,$84,$84,$84,$84,$84,$84,$84,
 		$84,$84,$84,$84,$04,
-		$41,lo(word(@dlist)),hi(word(@dlist))
+		$41,lo(Word(@dlist)),hi(Word(@dlist))
 	);
 
-	fntTable: array [0..29] of byte = (
+	fntTable: array [0..29] of Byte = (
 		hi(fnt255),hi(fnt255),hi(fnt0),hi(fnt144),hi(fnt159),hi(fnt149),hi(fnt255),hi(fnt255),
 		hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),
 		hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),
 		hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255),hi(fnt255)
 	);
 
-	c0Table: array [0..29] of byte = (
+	c0Table: array [0..29] of Byte = (
 		$00,$00,$00,$14,$14,$14,$14,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00
 	);
 
-	c1Table: array [0..29] of byte = (
+	c1Table: array [0..29] of Byte = (
 		$00,$00,$00,$12,$12,$12,$12,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00
 	);
 
-	c2Table: array [0..29] of byte = (
+	c2Table: array [0..29] of Byte = (
 		$00,$00,$00,$1C,$1C,$1C,$1C,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00
 	);
 
-	c3Table: array [0..29] of byte = (
+	c3Table: array [0..29] of Byte = (
 		$00,$00,$00,$80,$80,$80,$80,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
 		$00,$00,$00,$00,$00,$00,$00,$00,
@@ -52,7 +52,7 @@ const
 	);
 
 var
-	old_dli, old_vbl: pointer;
+	old_dli, old_vbl: Pointer;
 
 
 procedure vbl; assembler; interrupt;
@@ -142,8 +142,8 @@ begin
  GetIntVec(iVBL, old_vbl);
  GetIntVec(iDLI, old_dli);
 
- sdmctl := byte(wide or enable or missiles or players or oneline);
- sdlstl := word(@dlist);	// ($230) = @dlist, New DLIST Program
+ sdmctl := Byte(wide or enable or missiles or players or oneline);
+ sdlstl := Word(@dlist);	// ($230) = @dlist, New DLIST Program
 
  SetIntVec(iVBL, @vbl);
  SetIntVec(iDLI, @dli);

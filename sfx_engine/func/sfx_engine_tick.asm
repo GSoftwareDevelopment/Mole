@@ -43,7 +43,7 @@ end_tick
 
 .ifdef MAIN.@DEFINES.SFX_SYNCAUDIOOUT
 ; move audio buffer data, direct to audio registers
-	ldx #7
+	ldx #3
 audio_loop
 	lda AUDIOBUF,x
 	sta audf,x

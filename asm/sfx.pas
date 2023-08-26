@@ -1,16 +1,16 @@
 var
-	channels:array[0..15] of byte absolute SFX_CHANNELS_ADDR;
-//	sfxPtr:word absolute $f7;
-//	chnOfs:byte absolute $F9;
-//	chnFreq:byte absolute $Fa;
-//	chnMod:byte absolute $Fb;
-//	chnCtrl:byte absolute $Fc;
-	sfx:array[0..127] of word absolute SFX_DATA_ADDR;
+	channels:array[0..15] of Byte absolute SFX_CHANNELS_ADDR;
+//	sfxPtr:Word absolute $f7;
+//	chnOfs:Byte absolute $F9;
+//	chnFreq:Byte absolute $Fa;
+//	chnMod:Byte absolute $Fb;
+//	chnCtrl:Byte absolute $Fc;
+	sfx:array[0..127] of Word absolute SFX_DATA_ADDR;
 
-	audctl:byte absolute $D208;
-	skctl:byte absolute $D20F;
+	audctl:Byte absolute $D208;
+	skctl:Byte absolute $D20F;
 
-	oldVBL:pointer;
+	oldVBL:Pointer;
 
 procedure SFX_tick(); Assembler; Interrupt;
 asm
@@ -20,7 +20,7 @@ sysvbv   = $e45c;
 audf     = $d200;
 audc     = $d201;
 
-sfxPtr	= $f7; // SFX - Current channel SFX Pointer (2 bytes)
+sfxPtr	= $f7; // SFX - Current channel SFX Pointer (2 Bytes)
 chnOfs	= $f9; // SFX - Current channel Offset in SFX definition
 chnFreq	= $fa; // SFX - Current channel Frequency
 chnMod	= $fb; // SFX - Current channel Modulator
@@ -130,7 +130,7 @@ end;
 
 procedure SFX_Init();
 var
-	i:byte;
+	i:Byte;
 
 begin
   for i:=0 to 15 do
@@ -149,7 +149,7 @@ begin
   nmien := $40;
 end;
 
-procedure SFX_Play(chn,freq:byte; sfxID:word);
+procedure SFX_Play(chn,freq:Byte; sfxID:Word);
 begin
 	chn:=chn shl 2;
 	channels[chn+0]:=lo(sfx[sfxID]);

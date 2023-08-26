@@ -1,14 +1,14 @@
 type
 	TStatus = Record
 		score,
-		blocks:word;
-		level:byte;
-		nextLevel:word;
-		oldNextLevel:word;
+		blocks:Word;
+		level:Byte;
+		nextLevel:Word;
+		oldNextLevel:Word;
 		blockFallSpeed:shortint;
-		blockVanishingTime:word;	// Time after which the block disappears
-		vanishWarning:word;			// Time after which thw Warning block flash
-		breakSpeed:word;			// speed of block break before vanish
+		blockVanishingTime:Word;	// Time after which the block disappears
+		vanishWarning:Word;			// Time after which thw Warning block flash
+		breakSpeed:Word;			// speed of block break before vanish
 	end;
 
 // 	PBestEntry=^TBestEntry;
@@ -36,6 +36,7 @@ type
 //		key_Right = 135,
 //		key_Up = 142,
 //		key_Down = 143
+		key_CTRL_X = 22+128
 	);
 
 	TMenu = (
@@ -51,7 +52,7 @@ type
 	);
 
 	THistoryPages = record
-		start:byte;
-		YStart:byte;
-		lines:byte;
+		start:Byte;
+		YStart:Byte;
+		lines:Byte;
 	end;

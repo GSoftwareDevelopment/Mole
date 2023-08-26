@@ -5,11 +5,23 @@
 ; title screen display list
 
 dl_title
-		dta DL_BLANK8
-    dta DL_BLANK4 + DL_DLI
+		dta DL_BLANK8 + DL_DLI
+    dta DL_BLANK8
     dta DL_MODE_40x24T5 + DL_LMS, a(SCREEN_ADDR)
-    :13 dta DL_MODE_40x24T5
-    dta DL_BLANK4 + DL_DLI
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5 + DL_DLI
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5 + DL_DLI
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5 + DL_DLI
+    dta DL_MODE_40x24T5
+    dta DL_MODE_40x24T5 + DL_DLI
+    dta DL_MODE_40x24T5
+
+    dta DL_BLANK8 + DL_DLI
     :5 dta DL_MODE_20x12T5
     dta DL_BLANK4 + DL_DLI
     dta DL_MODE_20x12T5 + DL_HSCROLL

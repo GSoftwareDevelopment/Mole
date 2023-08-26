@@ -1,7 +1,7 @@
 const
 	stateStop		= %00000000;	// mole do nothing
 	stateEat		= %10000000;	// mole eat block
-	stateFallen		= %01000000;	// mole fallen low
+	stateFallen	= %01000000;	// mole fallen low
 	stateJump		= %00100000;	// mole is jump
 	stateMove		= %00010000;	// mole in move
 
@@ -9,10 +9,10 @@ const
 	dirRight		= %00001000;	// 1-right
 
 	maskState		= %01110000;	// state mask
-  	maskDir			= %00001000;	// mole direction mask:
+  	maskDir		= %00001000;	// mole direction mask:
 	maskPhase		= %00000111;  // phase mask
 
-	moleSpritePhases:array[0..3, 0..3] of byte = (
+	moleSpritePhases:array[0..3, 0..3] of Byte = (
 		(9,3,255,255),	// %00000phs do nothing phases (for left and right)
 		(6,7,8,7),			// %00110phs moving right phases
 		(0,1,2,1),			// %00100phs moving left phases
@@ -24,7 +24,7 @@ const
 	stateVanishBlock= %00000100;	//
 
 const
-	plyChn = 2;
+	plyChn = 0;
 
 	sfx_choice = 15;
 	sfx_selectUp = 16;
@@ -37,8 +37,8 @@ const
 	sfx_blockBrk = 13;
 	sfx_blockVsh = 14;
 
-	leftBound:array[0..13] of word = ($000,$028,$050,$078,$0a0,$0c8,$0f0,$118,$140,$168,$190,$1b8,$1e0,$208);
-	rightBound:array[0..13] of word = ($027,$04f,$077,$09f,$0c7,$0ef,$117,$13f,$167,$18f,$1b7,$1df,$207,$22f);
+	leftBound:array[0..13] of Word = ($000,$028,$050,$078,$0a0,$0c8,$0f0,$118,$140,$168,$190,$1b8,$1e0,$208);
+	// rightBound:array[0..13] of Word = ($027,$04f,$077,$09f,$0c7,$0ef,$117,$13f,$167,$18f,$1b7,$1df,$207,$22f);
 
 	icon_blank 	= 0;
 //	icon_cursor	= 2;
@@ -49,7 +49,7 @@ const
 	icon_mode	= 12;
 	icon_modesel= 18;
 
-	icons:array[0..23] of byte = (
+	icons:array[0..23] of Byte = (
 	0,0,			// blank
 	30,31,		// cursor
 	62,62,		// left
@@ -86,7 +86,7 @@ const
 	);
 {$ENDIF}
 
-	scrollScreenOfs:array[0..3] of word =(
+	scrollScreenOfs:array[0..3] of Word =(
 		SCREEN_ADDR+SCREEN_TITLE_SIZE-20,
 		SCREEN_ADDR+SCREEN_HISTORY_SIZE-20,
 		SCREEN_ADDR+SCREEN_BESTS_SIZE-20,
@@ -96,7 +96,7 @@ const
 	string_menu			= 0;
 	string_bests		= 1;
 {$IFDEF ENGLISH}
-	string_history	: array[0..3,0..2] of byte = (
+	string_history	: array[0..3,0..2] of Byte = (
 		(2, 3 ,7),
 		(3, 5 ,3),
 		(4, 4 ,6),
@@ -104,7 +104,7 @@ const
 	);
 {$ENDIF}
 {$IFDEF POLISH}
-	string_history	: array[0..3,0..2] of byte = (
+	string_history	: array[0..3,0..2] of Byte = (
 		(2, 3 ,7),
 		(3, 5 ,3),
 		(4, 5 ,4),
@@ -115,4 +115,4 @@ const
 	string_gameover	= 7;
 	string_topstatus= 8;
 
-	colors_title : array[0..4] of byte = ($a8, $ca, $94, $46, $00);
+	colors_title : array[0..4] of Byte = ($a8, $ca, $94, $46, $00);

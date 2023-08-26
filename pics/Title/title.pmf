@@ -31,7 +31,7 @@ cont	ldx #0
 wait	lda:cmp:req cloc
 	rts
 
-.proc	color (.Byte a) .reg
+.proc	color (.byte a) .reg
 	beq color0
 
 color1	mva #{lda $ffff,y} plot.src
@@ -247,7 +247,7 @@ cnt	dta a(0)
 // -----------------------------------------------------------
 
 	ift FADECHR = 1
-.proc	box (.Byte width, height) .var
+.proc	box (.byte width, height) .var
 
 loop	mva width w
 	dec w
@@ -301,14 +301,14 @@ height	brk
 
 // -----------------------------------------------------------
 
-.proc	movfil	(.Word fadr, fhlp, fcnt .Byte fill+1) .var
+.proc	movfil	(.word fadr, fhlp, fcnt .byte fill+1) .var
 
 	sta fill_+1
 
 	LDY #0
 	LDX fcnt+1
 	BEQ MD2
-MD1	LDA (fadr),y ; move the remaining Bytes
+MD1	LDA (fadr),y ; move the remaining bytes
 	STA (fhlp),y
 fill	lda #0
 	sta (fadr),y
@@ -320,7 +320,7 @@ fill	lda #0
 	BNE MD1
 MD2	LDX fcnt
 	BEQ MD4
-MD3	LDA (fadr),y ; move the remaining Bytes
+MD3	LDA (fadr),y ; move the remaining bytes
 	STA (fhlp),y
 fill_	lda #0
 	sta (fadr),y
@@ -346,7 +346,7 @@ pmgClr	sta pmg+$300,y
 
 // -----------------------------------------------------------
 
-.proc	plot (.Byte x,y) .reg
+.proc	plot (.byte x,y) .reg
 
 	stx rx		; Y char position
 	sty ry		; X char position

@@ -3,10 +3,10 @@ const
 	maxBestsOnScreen = 8;
 
 var
-	bestsMode:byte=mode_local; // default best mode: local
-	bests:array[0..maxBests*sizeOf(TBestEntry)] of byte;
+	bestsMode:Byte=mode_local; // default best mode: local
+	bests:array[0..maxBests*sizeOf(TBestEntry)] of Byte;
 	bestEntry:TBestEntry;
-	bestsSection:byte;
+	bestsSection:Byte;
 	bestsTotalPages,
 	bestsCurrentPage:shortint;
 
@@ -22,13 +22,13 @@ begin
 end;
 
 procedure updateBestsScreen();
-var y:byte;
+var y:Byte;
 		place:string[2];
 
 begin
 	for j:=0 to maxBestsOnScreen-1 do
 	begin
-		move(@bests[i*sizeOf(TBestEntry)],@bestEntry,sizeOf(TBestEntry));
+		move(@bests[j*sizeOf(TBestEntry)],@bestEntry,sizeOf(TBestEntry));
 		y:=4+j;
 		if (bestEntry._score=0) then
 		begin
@@ -44,9 +44,9 @@ begin
 	end;
 end;
 
-procedure updateBestsMode(active:boolean);
+procedure updateBestsMode(active:Boolean);
 const
-	modePos:array[0..2] of word = (4,6,9);
+	modePos:array[0..2] of Word = (4,6,9);
 
 begin
 	subStringSelect(string_bests,2);
@@ -90,7 +90,7 @@ end;
 
 procedure bests_list();
 begin
-	if (_timer-blinkTime>=10) then
+	if (byte(_timer-blinkTime)>=10) then
 	begin
 		blinkTime:=_timer;
 {$IFDEF ENGLISH}
@@ -122,7 +122,7 @@ end;
 
 procedure bests_mode();
 begin
-	if (_timer-blinkTime>=10) then
+	if (byte(_timer-blinkTime)>=10) then
 	begin
 		blinkTime:=_timer;
 		blinkIcon(2,3,icon_up);
@@ -157,7 +157,7 @@ end;
 
 procedure bestsLoop();
 // var
-//	leaveBests:boolean;
+//	leaveBests:Boolean;
 
 begin
 	bestsSection:=1; bestsTotalPages:=5; bestsCurrentPage:=0;
@@ -173,11 +173,11 @@ end;
 
 procedure bestsScreen();
 begin
-	createBests();
 	setDL(DLIST_BESTS_ADDR,@dli_bests);
 // set character
 	CHBAS:=CHARSET1_PAGE;
 	scrofs:=0;
+	clearTitlePMG();
 	fillchar(@scr,SCREEN_BESTS_SIZE,$00);
 	for i:=0 to 19 do	begin	scr[scrofs]:=$34; scrofs:=scrofs+1; scr[scrofs]:=$35; scrofs:=scrofs+1;	end;
 	for i:=0 to 19 do	begin	scr[scrofs]:=$38; scrofs:=scrofs+1; scr[scrofs]:=$39; scrofs:=scrofs+1;	end;

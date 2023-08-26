@@ -17,8 +17,8 @@ begin
 end;
 
 procedure updateBottomStatus;
-var a,b:byte;
-	ofs1,ofs2:word;
+var a,b:Byte;
+	ofs1,ofs2:Word;
 	clev:integer;
 
 begin
@@ -35,8 +35,8 @@ begin
 end;
 
 var
-	yOfs:byte;
-	sprOfs:word;
+	yOfs:Byte;
+	sprOfs:Word;
 
 procedure updateMolePosition();
 begin
@@ -61,7 +61,7 @@ begin
 	HPOSP[0]:=49+mX; HPOSP[1]:=49+mX;
 end;
 
-procedure setMoleSprite(sprNo:byte);
+procedure setMoleSprite(sprNo:Byte);
 begin
 	if (sprNo=moleSprite) then exit;
 	moleSprite:=sprNo;
@@ -76,7 +76,7 @@ end;
 
 procedure initNewGame();
 var
-	newBlocks:byte;
+	newBlocks:Byte;
 	dx:shortint;
 
 begin
@@ -147,7 +147,7 @@ var
 	state,
 	newState,
 	moleDir,
-	phase,dir:byte;
+	phase,dir:Byte;
 
 begin
 	if (moleState and maskState=stateStop) and (moleY<10) and (moleFallenTime=0) then
@@ -202,7 +202,7 @@ begin
 					newState:=stateStop;
 				end;
 			end;
-			if (phase and 3=2) then SFX_Freq(3,50,sfx_moleMove);
+			if (phase and 3=2) then SFX_Freq(plyChn+1,50,sfx_moleMove);
 			moleFallenTime:=50; // globalTime;
 		end;
 
@@ -213,12 +213,12 @@ begin
 				if (phase<4) then
 				begin
 					mY:=mY-4;
-					if (phase=0) then SFX_Freq(2,100,sfx_moleJump);
+					if (phase=0) then SFX_Freq(plyChn,100,sfx_moleJump);
 					setMoleSprite(moleSpritePhases[3][dir shl 1]);
 				end
 				else
 				begin
-					SFX_Freq(3,50,sfx_moleMove);
+					SFX_Freq(plyChn+1,50,sfx_moleMove);
 					setMoleSprite(moleSpritePhases[3][dir shl 1+1]);
 				end;
 				updateMolePosition();
@@ -245,7 +245,7 @@ begin
 				end
 				else
 				begin
-					SFX_Freq(3,50,sfx_moleMove);
+					SFX_Freq(plyChn+1,50,sfx_moleMove);
 					setMoleSprite(moleSpritePhases[3][dir shl 1]);
 				end;
 				updateMolePosition();
@@ -274,7 +274,7 @@ end;
 
 procedure moleControl();
 var
-	phase,moleDir:byte;
+	phase,moleDir:Byte;
 
 begin
 	phase:=moleState and maskPhase;
@@ -294,9 +294,9 @@ begin
 end;
 
 //
-procedure moleEatBlock(blockIndex:byte);
+procedure moleEatBlock(blockIndex:Byte);
 var
-	blockOfs:byte;
+	blockOfs:Byte;
 	points:longint;
 
 begin
@@ -322,9 +322,9 @@ begin
 	move(@blocksList[blockOfs+4],@blocksList[blockOfs],252-blockOfs);
 	//
 	if Block<>17 then
-		SFX_Freq(3,20,sfx_moleEat)
+		SFX_Freq(plyChn+1,20,sfx_moleEat)
 	else
-		SFX_Freq(3,40,sfx_choice);
+		SFX_Freq(plyChn+1,40,sfx_choice);
 
 	putBlocksOnScreen;
 
@@ -357,7 +357,7 @@ begin
 end;
 
 procedure GameOverScreen();
-var len:byte;
+var len:Byte;
 
 begin
 	setDL(DLIST_GAMEOVER_ADDR,@dli_gameover);
@@ -370,8 +370,8 @@ begin
 	CHBAS:=CHARSET4_PAGE;
 
 	fillchar(@scr,256+32,$00);
-	move(pointer(G2F_SCREEN+288),@scr[10],32*4-11);
-	move(pointer(G2F_PMG+12),@pmg[40+32+34],13);
+	move(Pointer(G2F_SCREEN+288),@scr[10],32*4-11);
+	move(Pointer(G2F_PMG+12),@pmg[40+32+34],13);
 
 	for i:=0 to 1 do
 	begin
@@ -383,21 +383,21 @@ begin
 end;
 
 procedure moleDie();
-var w,_w:byte;
-	y:word;
-	dieTime:byte;
-	anmTime:byte;
+var w,_w:Byte;
+	y:Word;
+	dieTime:Byte;
+	anmTime:Byte;
 
 const
-	sprofs:array[0..3] of word = ($0f0,$100,$110,$100);
+	sprofs:array[0..3] of Word = ($0f0,$100,$110,$100);
 
 begin
-	SFX_PlaySONG(23*4); SFX_Freq(3,10,sfx_moleDie);
+	SFX_PlaySONG(23*4); SFX_Freq(plyChn+1,10,sfx_moleDie);
 	i:=12; dieTime:=60; anmTime:=4; o_timer:=_timer;
 	PCOL[2]:=15; HPOSP[2]:=49+mx; y:=$200+28+my; w:=0;
 	kbcode:=255;
 	repeat
-		if _timer-o_timer>0 then
+		if _timer-o_timer<>0 then
 		begin
 			if anmTime>0 then dec(anmTime);
 			o_timer:=_timer;
@@ -436,7 +436,7 @@ end;
 
 procedure blockTest();
 var
-	ofs,_tb:byte;
+	ofs,_tb:Byte;
 
 begin
 	if (blockState and stateNewBlocks=stateNewBlocks) then
@@ -485,7 +485,7 @@ end;
 
 procedure blockVanishTest();
 var
-	ofs:byte;
+	ofs:Byte;
 
 begin
 	if (blockState and stateVanishBlock=0) and
@@ -513,7 +513,7 @@ begin
 		move(@blocksList[vanishingBlockOfs],@Xpos,4);
 		if vanishTime=0 then // vanish block
 		begin
-			SFX_Freq(2,200,sfx_blockBrk);
+			SFX_Freq(plyChn,200,sfx_blockBrk);
 
 			ClearBlock(Xpos,Ypos,Block);
 			removeBlockDef(Block);
@@ -531,7 +531,7 @@ begin
 		begin
 			if vanishBreakTime=0 then
 			Begin
-				SFX_Freq(2,200,sfx_blockVsh);
+				SFX_Freq(plyChn,200,sfx_blockVsh);
 
 				BreakBlock(vanishingBlockOfs shr 2);
 				vanishBreakTime:=Status.breakSpeed;
@@ -546,7 +546,7 @@ procedure gameLoop();
 begin
 	o_timer:=_timer;
 	repeat
-		if _timer-o_timer>0 then
+		if _timer-o_timer<>0 then
 		begin
 			o_timer:=_timer;
 			if moleTime>0 then dec(moleTime);
@@ -565,10 +565,9 @@ begin
 end;
 
 procedure ReadyScreen();
-var len:byte;
+var len:Byte;
 
 begin
-
 	setDL(DLIST_READY_ADDR,@dli_ready);
 	initPMG();
 
@@ -579,8 +578,8 @@ begin
 	CHBAS:=CHARSET4_PAGE;
 
 	fillchar(@scr,256+32,$00);
-	move(pointer(G2F_SCREEN),@scr[11],32*8-11);
-	move(pointer(G2F_PMG),@pmg[48+32+35],12);
+	move(Pointer(G2F_SCREEN),@scr[11],32*8-11);
+	move(Pointer(G2F_PMG),@pmg[48+32+35],12);
 
 	for i:=0 to 1 do
 	begin

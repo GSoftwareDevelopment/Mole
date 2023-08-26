@@ -53,7 +53,7 @@ restore_offset_and_continue_fetch
 .endif
 
 continue_fetch
-	lda SFX_CHANNELS_ADDR+_sfxPtrLo,x   ; get SFX pointer
+	lda SFX_CHANNELS_ADDR+_sfxPtrLo,x   ; get SFX Pointer
 	sta dataPtr
 	lda SFX_CHANNELS_ADDR+_sfxPtrHi,x
 	sta dataPtr+1

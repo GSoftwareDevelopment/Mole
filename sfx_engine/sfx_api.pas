@@ -2,8 +2,8 @@ unit SFX_API;
 
 interface
 type
-  byteArray=array[0..0] of byte;
-  wordArray=array[0..0] of word;
+  ByteArray=array[0..0] of Byte;
+  WordArray=array[0..0] of Word;
 
 const
 {$i sfx_engine.conf.inc} // import SFX-Engine configuration
@@ -13,35 +13,35 @@ const
 {$i sfx_engine/sfx_engine_const.inc}
 
 var
-  SONGData:byteArray absolute SONG_ADDR;              // table for SONG data
-  SFXModMode:byteArray absolute SFX_MODE_SET_ADDR;    // indicates the type of modulation used in the SFX.
-  SFXNoteSetOfs:byteArray absolute SFX_NOTE_SET_ADDR; //
-  SFXPtr:wordArray absolute SFX_TABLE_ADDR;           // heap pointers to SFX definitions
-  TABPtr:wordArray absolute TAB_TABLE_ADDR;           // heap pointera to TAB definitions
+  SONGData:ByteArray absolute SONG_ADDR;              // table for SONG data
+  SFXModMode:ByteArray absolute SFX_MODE_SET_ADDR;    // indicates the type of modulation used in the SFX.
+  SFXNoteSetOfs:ByteArray absolute SFX_NOTE_SET_ADDR; //
+  SFXPtr:WordArray absolute SFX_TABLE_ADDR;           // heap Pointers to SFX definitions
+  TABPtr:WordArray absolute TAB_TABLE_ADDR;           // heap Pointera to TAB definitions
 
-  SONG_Tempo:byte absolute SFX_REGISTERS+$00;
-  SONG_Tick:byte absolute SFX_REGISTERS+$01;
-  SONG_Ofs:byte absolute SFX_REGISTERS+$02;
-  SONG_RepCount:byte absolute SFX_REGISTERS+$03;
+  SONG_Tempo:Byte absolute SFX_REGISTERS+$00;
+  SONG_Tick:Byte absolute SFX_REGISTERS+$01;
+  SONG_Ofs:Byte absolute SFX_REGISTERS+$02;
+  SONG_RepCount:Byte absolute SFX_REGISTERS+$03;
 
-  channels:array[0..0] of byte absolute SFX_CHANNELS_ADDR;
+  channels:array[0..0] of Byte absolute SFX_CHANNELS_ADDR;
 
 procedure INIT_SFXEngine(); Assembler;
 procedure SFX_StartDLI();
 procedure SFX_StartVBL();
-procedure SFX_ChannelOff(channel:byte); Assembler;
+procedure SFX_ChannelOff(channel:Byte); Assembler;
 procedure SFX_Off(); Assembler;
-procedure SFX_Note(channel,note,SFXId:byte); Assembler;
-procedure SFX_Freq(channel,freq,SFXId:byte); Assembler;
-procedure SFX_PlayTAB(channel,TABId:byte); Assembler;
-procedure SFX_PlaySONG(startPos:byte); Assembler;
+procedure SFX_Note(channel,note,SFXId:Byte); Assembler;
+procedure SFX_Freq(channel,freq,SFXId:Byte); Assembler;
+procedure SFX_PlayTAB(channel,TABId:Byte); Assembler;
+procedure SFX_PlaySONG(startPos:Byte); Assembler;
 procedure SFX_End();
 
 implementation
 var
-  NMIEN:byte absolute $D40E;
-  oldIntVec:pointer;
-  IntMode:byte;
+  NMIEN:Byte absolute $D40E;
+  oldIntVec:Pointer;
+  IntMode:Byte;
 
 procedure INIT_SFXEngine; Assembler;
 asm

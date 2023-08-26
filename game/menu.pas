@@ -1,19 +1,19 @@
 var
-	menuOpt:byte = 0;
+	menuOpt:Byte = 0;
 
 procedure updateMenu();
 const
 {$IFDEF ENGLISH}
-	sofs:array[0..2] of word = (586,604,625);
+	sofs:array[0..2] of Word = (546,564,585);
 {$ENDIF}
 {$IFDEF POLISH}
-	sofs:array[0..2] of word = (586,606,626);
+	sofs:array[0..2] of Word = (546,566,586);
 {$ENDIF}
 
 begin
 	for i:=0 to 2 do
 	begin
-		putSCString(sofs[i],string_menu,i,byte(i=menuOpt));
+		putSCString(sofs[i],string_menu,i,Byte(i=menuOpt));
 	end;
 end;
 
@@ -44,6 +44,7 @@ begin
 					2: historyScreen();
 				end;
 			end;
+			key_CTRL_X: Exit_Game();
 		end;
 		updateMenu();
 		kbcode:=$ff;

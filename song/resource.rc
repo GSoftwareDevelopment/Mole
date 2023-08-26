@@ -1,1 +1,2 @@
 SFX_ORG rcasm 'song/mole.asm';
+MIDI_ORG rcasm 'song/mole_midi.asm';

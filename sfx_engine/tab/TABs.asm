@@ -10,14 +10,14 @@ check_TAB_offset
 
 check_end_of_TAB
 			cmp #$80
-			bne fetch_TAB_pointer
+			bne fetch_TAB_Pointer
 			jmp TABFn_TAB_END
 
-fetch_TAB_pointer
+fetch_TAB_Pointer
 			asl @                                   ; multiply by 2 to get offset
 			tay                                     ; store in Y register
 
-         lda SFX_CHANNELS_ADDR+_tabPtrLo,x       ; get TAB pointer
+         lda SFX_CHANNELS_ADDR+_tabPtrLo,x       ; get TAB Pointer
          sta dataPtr
          lda SFX_CHANNELS_ADDR+_tabPtrHi,x
          sta dataPtr+1

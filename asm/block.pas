@@ -1,26 +1,26 @@
 const
 	DefinedBlocks = 18;
 
-	rowOfs:array[0..11] of byte=($00,$14,$28,$3c,$50,$64,$78,$8c,$a0,$b4,$c8,$dc);
+	rowOfs:array[0..11] of Byte=($00,$14,$28,$3c,$50,$64,$78,$8c,$a0,$b4,$c8,$dc);
 	_RAND = $d20a;
 
 var
-	fr0			:word absolute $70;
-	testX		:byte absolute $72;
-	testY		:byte absolute $73;
-	tb			:byte absolute $77; // total blocks on screen
-	Xpos		:byte absolute $78;
-	Ypos		:byte absolute $79;
-	Block		:byte absolute $7a;
-	Color		:byte absolute $7b;
+	fr0			:Word absolute $70;
+	testX		:Byte absolute $72;
+	testY		:Byte absolute $73;
+	tb			:Byte absolute $77; // total blocks on screen
+	Xpos		:Byte absolute $78;
+	Ypos		:Byte absolute $79;
+	Block		:Byte absolute $7a;
+	Color		:Byte absolute $7b;
 
-	defvec		:word absolute $62; // 2 bytes
-	lstvec		:word absolute $64; // 2 bytes
+	defvec		:Word absolute $62; // 2 Bytes
+	lstvec		:Word absolute $64; // 2 Bytes
 
-	blocksList	:array[0..255] of byte absolute BLOCKS_LIST_ADDR;
-	blocksDef	:array[0..255] of byte absolute BLOCKS_DEF_ADDR;
+	blocksList	:array[0..255] of Byte absolute BLOCKS_LIST_ADDR;
+	blocksDef	:array[0..255] of Byte absolute BLOCKS_DEF_ADDR;
 
-	lastDefinedBlock:byte = DefinedBlocks;
+	lastDefinedBlock:Byte = DefinedBlocks;
 
 // Rysuj blok
 procedure DrawBlock(_Xpos,_Ypos,_Block,_Color:Byte);
@@ -30,19 +30,19 @@ begin
 	Block:=_Block;
 	Color:=_Color;
 	asm {
-		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.DRAWBLOCK // BLOCK_ASM_ADDR+$000e
+		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.DRAWBLOCK // BLOCK_ASM_ADDR+$000e
 	};
 end;
 
-// function TestBlock(_Xpos,_Ypos,_Block:Byte):boolean;
+// function TestBlock(_Xpos,_Ypos,_Block:Byte):Boolean;
 // begin
 // 	Xpos:=_Xpos;
 // 	Ypos:=_Ypos;
 // 	Block:=_Block;
 // 	asm {
-// 		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.TESTBLOCK // BLOCK_ASM_ADDR+$0032
+// 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.TESTBLOCK // BLOCK_ASM_ADDR+$0032
 // 	};
-// 	result:=boolean(fr0); // zwrot, prawda, jeżeli testowany blok koliduje
+// 	result:=Boolean(fr0); // zwrot, prawda, jeżeli testowany blok koliduje
 // end;
 
 procedure ClearBlock(_Xpos,_Ypos,_Block:Byte);
@@ -51,7 +51,7 @@ begin
 	Ypos:=_Ypos;
 	Block:=_Block;
 	asm {
-		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.CLEARBLOCK // BLOCK_ASM_ADDR+$0065
+		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.CLEARBLOCK // BLOCK_ASM_ADDR+$0065
 	};
 end;
 
@@ -59,51 +59,51 @@ function DropBlocks(_totalBlocks:Byte):Byte;
 begin
 	tb:=_totalBlocks;
 	asm {
-		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.DROPBLOCKS // BLOCK_ASM_ADDR+$0082
+		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.DROPBLOCKS // BLOCK_ASM_ADDR+$0082
 	};
-	result:=byte(fr0); // zwrot, ilość osuniętych bloków
+	result:=Byte(fr0); // zwrot, ilość osuniętych bloków
 end;
 
-function PointTest(_X,_Y,_totalBlocks:Byte):byte;
+function PointTest(_X,_Y,_totalBlocks:Byte):Byte;
 begin
 	testX:=_X;
 	testY:=_Y;
 	tb:=_totalBlocks;
 	asm {
-		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.POINTTEST // BLOCK_ASM_ADDR+$00d4
+		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.POINTTEST // BLOCK_ASM_ADDR+$00d4
 	};
-	result:=byte(fr0); // zwrot, numer bloku spełniającego test
+	result:=Byte(fr0); // zwrot, numer bloku spełniającego test
 end;
 
-function ShuffleBlocks(_Ypos,_totalBlocks:Byte):byte;
+function ShuffleBlocks(_Ypos,_totalBlocks:Byte):Byte;
 begin
 	Ypos:=_Ypos;
 	tb:=_totalBlocks;
 	asm {
-		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.SHUFFLEBLOCK // BLOCK_ASM_ADDR+$0153
+		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.SHUFFLEBLOCK // BLOCK_ASM_ADDR+$0153
 	};
-	result:=byte(fr0); // zwrot, ilość nowych bloków
+	result:=Byte(fr0); // zwrot, ilość nowych bloków
 end;
 
-function RandomBottomBlock(_totalBlocks:Byte):byte;
+function RandomBottomBlock(_totalBlocks:Byte):Byte;
 begin
 	tb:=_totalBlocks;
 	asm {
-		jsr RESOURCE.RESOURCE.RCASM4.RESOURCE._BLOCK_ASM_ADDR.RANDOMBOTTOMBLOCK // BLOCK_ASM_ADDR+$01ac
+		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.RANDOMBOTTOMBLOCK // BLOCK_ASM_ADDR+$01ac
 	};
-	result:=byte(fr0); // zwrot, offset wylosowanego bloku, lub $ff, jeżeli takiego bloku nie ma
+	result:=Byte(fr0); // zwrot, offset wylosowanego bloku, lub $ff, jeżeli takiego bloku nie ma
 end;
 
-function cloneBlockDef(_block:byte):byte;
+function cloneBlockDef(_block:Byte):Byte;
 begin
 	move(@blocksDef[_block shl 3],@blocksDef[lastDefinedBlock shl 3],8);
 	result:=lastDefinedBlock;
 	inc(lastDefinedBlock);
 end;
 
-procedure removeBlockDef(_block:byte);
+procedure removeBlockDef(_block:Byte);
 var
-	defOfs:byte;
+	defOfs:Byte;
 
 begin
 	if (_block>=DefinedBlocks) then
@@ -114,10 +114,10 @@ begin
 	end;
 end;
 
-function BreakBlock(_blockIndex:byte):boolean;
+function BreakBlock(_blockIndex:Byte):Boolean;
 var
-	i,defOfs,el:byte;
-	els:array[0..5] of byte;
+	i,defOfs,el:Byte;
+	els:array[0..5] of Byte;
 
 begin
 	Block:=blocksList[(_blockIndex shl 2)+2]; // pobierz index definicji bloku

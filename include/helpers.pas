@@ -1,47 +1,65 @@
 var
-	scr:Array[0..839] of byte absolute SCREEN_ADDR;
-	buffer:Array[0..511] of byte absolute SCREEN_BUFFER_ADDR;
-	sprites:array[0..319] of byte absolute PM_DATA_ADDR;
-	logos:array[0..63] of byte absolute LOGOS_DATA_ADDR;
-	statusbar:byte absolute SCR_STATUSBAR_ADDR;
-	strings_pointers:array[0..6] of word absolute STRINGS_POINTERS_ADDR;
-	strings_data:array[0..0] of byte absolute STRINGS_DATA_ADDR;
+	firstRun:boolean = True;
+	scr:Array[0..839] of Byte absolute SCREEN_ADDR;
+	buffer:Array[0..511] of Byte absolute SCREEN_BUFFER_ADDR;
+	sprites:array[0..319] of Byte absolute SPRITES_ADDR;
+	logos:array[0..63] of Byte absolute LOGOS_DATA_ADDR;
+	statusbar:Byte absolute SCR_STATUSBAR_ADDR;
+	strings_Pointers:array[0..6] of Word absolute STRINGS_PointerS_ADDR;
+	strings_data:array[0..0] of Byte absolute STRINGS_DATA_ADDR;
 
-	kbcode:byte absolute 764;
-	_timer:byte absolute $14;
-	scradr:word absolute 88;
-	oldDLI:pointer;
-	DList:word absolute $230;
-	RAND:byte absolute $d20a;
-	colpf:array[0..4] of byte absolute $2c4;
+	kbcode:Byte absolute 764;
+	_timer:Byte absolute $14;
+	scradr:Word absolute 88;
+	curDLIPtr,oldDLI,oldVBL:Pointer;
+	DList:Word absolute $230;
+	RAND:Byte absolute $d20a;
+	colpf:array[0..4] of Byte absolute $2c4;
 
-	GPRIOR:byte absolute $26f;
-	PMCTL:byte absolute $d01d;
-	HPOSP:array[0..3] of byte absolute $d000;
-	pmg:array[0..1023] of byte absolute PMG_ADDR;
-	PCOL:array[0..3] of byte absolute 704;
-	KRPDEL:byte absolute $2d9;
-	KEYREP:byte absolute $2da;
-	VCOUNT:byte absolute $d40b;
+	GPRIOR:Byte absolute $26f;
+	PMCTL:Byte absolute $d01d;
+	HPOSP:array[0..3] of Byte absolute $d000;
+	pmg:array[0..1023] of Byte absolute PMG_ADDR;
+	PCOL:array[0..3] of Byte absolute 704;
+	KRPDEL:Byte absolute $2d9;
+	KEYREP:Byte absolute $2da;
+	VCOUNT:Byte absolute $d40b;
 
-	isPMG:boolean = false;
-	STICK : byte absolute $278;
-	STRIG : byte absolute $284;
-	oldSTICK:byte = 15;
-	oldSTRIG:BYTE = 1;
+	isPMG:Boolean = false;
+	STICK : Byte absolute $278;
+	STRIG : Byte absolute $284;
+	oldSTICK:Byte = 15;
+	oldSTRIG:Byte = 1;
+
+// procedure moveZero(src,dst:Pointer; size:Byte); register;
+// begin
+// 	asm {
+// 			ldy size
+// 			beq ext
+// 		lp:
+// 			dey
+// 			bmi ext
+// 			lda (src),y
+// 			beq lp
+// 			sta (dst),y
+// 		nxt:
+// 			bne lp
+// 		ext:
+// 	};
+// end;
 
 // procedure _wait4key();
 // begin
 // 	kbcode:=255; repeat until kbcode<>255; kbcode:=255;
 // end;
 
-procedure delay(ticks:byte);
+procedure delay(ticks:Byte);
 var
-	oTM:byte;
+	oTM:Byte;
 
 begin
 	oTM:=_timer;
-	repeat until _timer-oTM>=ticks;
+	repeat until byte(_timer-oTM)>=ticks;
 end;
 
 procedure wait4screen();
@@ -63,13 +81,14 @@ begin
 	wait4screen();
 end;
 
-procedure setDL(dl_set:word; dliPtr:pointer);
+procedure setDL(dl_set:Word; dliPtr:Pointer);
 begin
 	offVideo();
 	delay(5);
 	NMIEN:=%01000000; // turn off DLI
 	if dliPtr<>nil then
 	begin
+		curDLIPtr:=dliPtr;
 		SetIntVec(iDLI, dliPtr);
 		NMIEN:=%11000000; // turn on DLI
 	end
@@ -93,7 +112,7 @@ end;
 procedure initPMG();
 begin
 	PMBASE:=PMG_BASE; PMCTL:=3; GPRIOR:=%00100001;
-	fillchar(@pmg,1024,0);
+	fillchar(pointer(PMG_ADDR-$100),1024+256,0);
 	isPMG:=true;
 end;
 
@@ -113,7 +132,7 @@ const
 	joy_right	= 7;
 
 var
-	ATRACT:byte absolute $4d;
+	ATRACT:Byte absolute $4d;
 begin
 	ATRACT:=0;
 
@@ -121,12 +140,12 @@ begin
 	begin
 		oldSTICK:=STICK; oldSTRIG:=STRIG;
 		case STICK of
-			joy_left: kbcode:=byte(key_Left);
-			joy_right: kbcode:=byte(key_Right);
-			joy_up: kbcode:=byte(key_Up);
-			joy_down: kbcode:=byte(key_Down);
+			joy_left: kbcode:=Byte(key_Left);
+			joy_right: kbcode:=Byte(key_Right);
+			joy_up: kbcode:=Byte(key_Up);
+			joy_down: kbcode:=Byte(key_Down);
 		end;
-		if (STRIG=0) then kbcode:=byte(key_RETURN);
+		if (STRIG=0) then kbcode:=Byte(key_RETURN);
 //		if STICK=15 then kbcode:=255;
 	end;
 end;
@@ -134,13 +153,13 @@ end;
 // strings
 
 var
-	txtofs,scrofs:word;
-	ch:byte;
-	i,j:byte;
+	txtofs,scrofs:Word;
+	ch:Byte;
+	i,j:Byte;
 
 procedure subStringSelect(sID,subSId:Byte);
 begin
-	txtofs:=strings_pointers[sId]-STRINGS_DATA_ADDR;
+	txtofs:=strings_Pointers[sId]-STRINGS_DATA_ADDR;
 	// substring seek
 	while subSId>0 do
 	begin
@@ -149,7 +168,7 @@ begin
 	end;
 end;
 
-function stringLen(sId,subSId:byte):byte;
+function stringLen(sId,subSId:Byte):Byte;
 begin
 	result:=0;
 	subStringSelect(sId,subSId);
@@ -161,7 +180,7 @@ begin
 	end;
 end;
 
-procedure putSCString(scrofs:word; sId,subSId:byte; color:byte);
+procedure putSCString(scrofs:Word; sId,subSId:Byte; color:Byte);
 begin
 	color:=color shl 7;
 	subStringSelect(sId,subSId);
@@ -173,9 +192,9 @@ begin
 	end;
 end;
 
-function stringDCLen():byte;
+function stringDCLen():Byte;
 var
-  otxtofs:word;
+  otxtofs:Word;
 
 begin
 	result:=0; otxtofs:=txtofs;
@@ -189,9 +208,9 @@ begin
 	txtofs:=otxtofs;
 end;
 
-procedure putDCString(x,y:byte; inv:boolean);
+procedure putDCString(x,y:Byte; inv:Boolean);
 var
-	color:byte;
+	color:Byte;
 
 begin
 	scrofs:=leftBound[y]+x;
@@ -219,9 +238,9 @@ begin
 	inc(txtofs);
 end;
 
-procedure putSCText(scrofs:word; s:string; color:byte);
+procedure putSCText(scrofs:Word; s:string; color:Byte);
 const
-	_color:array[0..3] of byte = ($00,$40,$80,$c0);
+	_color:array[0..3] of Byte = ($00,$40,$80,$c0);
 
 begin
 	color:=_color[color];
@@ -229,14 +248,14 @@ begin
 	i:=1;
 	while i<=length(s) do
 	begin
-		ch:=byte(s[i])-32; i:=i+1;
+		ch:=Byte(s[i])-32; i:=i+1;
 		scr[scrofs]:=ch or color; scrofs:=scrofs+1;
 	end;
 end;
 
-procedure putDCText(x,y:byte; s:string; inv:boolean);
+procedure putDCText(x,y:Byte; s:string; inv:Boolean);
 var
-	color:byte;
+	color:Byte;
 
 begin
 	scrofs:=leftBound[y]+x;
@@ -245,7 +264,7 @@ begin
 	i:=1;
 	while i<=length(s) do
 	begin
-		ch:=byte(s[i])-32; i:=i+1;
+		ch:=Byte(s[i])-32; i:=i+1;
 		ch:=ch shl 1+ch and $80;
 		scr[scrofs]:=ch or color; scrofs:=scrofs+1; ch:=ch+1;
 		scr[scrofs]:=ch or color; scrofs:=scrofs+1;

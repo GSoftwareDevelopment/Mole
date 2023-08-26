@@ -4,15 +4,6 @@
 ; a - frequency/note_index
 ; C flag - (1)frequency/(0)note_index
 
-	php
-
-	icl 'sfx2midi.asm'
-	bcc do_sfx
-	plp
-	rts
-
-do_sfx:
-	plp
 	pha                                 ; temporary put freq/note_index to stack
 
 	lda #SFX_OFF
@@ -55,6 +46,9 @@ PlayNote_setFreq
 PlayNote_setNote
 	pla                                 ; get freq/note_index from stack
 	sta SFX_CHANNELS_ADDR+_chnNote,x    ; set in channels register
+
+	icl 'sfx2midi.asm'
+	scc:rts
 
 	tay
 self_getNoteFromNoteTable

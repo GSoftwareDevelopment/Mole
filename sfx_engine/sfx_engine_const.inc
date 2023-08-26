@@ -1,4 +1,4 @@
-_sfxPtr        = 0;     // pointer to SFX data definition
+_sfxPtr        = 0;     // Pointer to SFX data definition
 _sfxPtrLo      = 0;     //
 _sfxPtrHi      = 1;     //
 _sfxNoteTabOfs = 2;     //
@@ -15,8 +15,11 @@ _chnCtrl       = 8;     // SFX current distortion & volume
 
 _trackOfs      = 10;    // current Track offest
 
-_tabPtr        = 12;    // pointer to TAB data definition
+_tabPtr        = 12;    // Pointer to TAB data definition
 _tabPtrLo      = 12;    //
 _tabPtrHi      = 13;    //
 _tabOfs        = 14;    // TAB row offset
 _tabRep        = 15;    // TAB current repeat value
+
+//
+

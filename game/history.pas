@@ -1,8 +1,8 @@
 var
-	blinkState:boolean;
-	blinkTime:byte;
+	blinkState:Boolean;
+	blinkTime:Byte;
 
-procedure blinkIcon(x,y,icon:byte);
+procedure blinkIcon(x,y,icon:Byte);
 begin
 	if (blinkState) then
 		move(@icons[icon],@scr[x+leftBound[y]],2)
@@ -10,8 +10,8 @@ begin
 		move(@icons[icon_blank],@scr[x+leftBound[y]],2);
 end;
 
-procedure updateHistoryPage(page:byte);
-var startY,lines:byte;
+procedure updateHistoryPage(page:Byte);
+var startY,lines:Byte;
 
 begin
 	fillchar(@scr[80],SCREEN_HISTORY_SIZE-180,$00);
@@ -29,14 +29,14 @@ end;
 procedure historyScreen();
 var
 	key:TKeys;
-	ofs:word;
+	ofs:Word;
 
 	procedure wait4controller();
 	begin
 		kbcode:=255;
 		repeat
 			joy2key();
-			if (_timer-blinkTime>=10) then
+			if (byte(_timer-blinkTime)>=10) then
 			begin
 				blinkTime:=_timer;
 				blinkIcon(37,11,icon_right);
@@ -52,6 +52,7 @@ begin
 	setDL(DLIST_HISTORY_ADDR,@dli_bests);
 // set character
 	CHBAS:=CHARSET1_PAGE;
+	clearTitlePMG();
 	fillchar(@scr,SCREEN_HISTORY_SIZE,$00);
 	fillchar(@scr,80,$3a);
 	ofs:=0;

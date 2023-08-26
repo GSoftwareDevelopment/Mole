@@ -9,7 +9,7 @@ _rz = '*'
 _rzi= '+'
 
 _EOL = $FF
-strings_pointers
+strings_Pointers
 			dta a(strings_menu)
 			dta a(strings_bests)
 			dta a(strings_history_page0)
@@ -19,7 +19,7 @@ strings_pointers
 			dta a(strings_ready)
 			dta a(string_gameover)
 			dta a(strings_top_status)
-			.print "STRINGS POINTERS SIZE: ", *-strings_pointers
+			.print "STRINGS PointerS SIZE: ", *-strings_Pointers
 
 strings_list
 strings_menu
@@ -91,4 +91,4 @@ strings_top_status
 			dta d'SCORE',_EOL
 			dta d'LEVEL',_EOL
 
-		.print "STRINGS SIZE: ", *-strings_pointers
+		.print "STRINGS SIZE: ", *-strings_Pointers
