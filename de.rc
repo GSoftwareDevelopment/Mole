@@ -1,0 +1,6 @@
+SCROLL_DATA_ADDR      rcasm  'data/scroll-de.asm';  ; $7e58
+STRINGS_PointerS_ADDR rcasm  'data/strings-de.asm'; ; $8000
+
+; game charcter set
+CHARSET1_ADDR         rcdata 'data/title-b-de.fnt'     ; $a000
+CHARSET2_ADDR         rcdata 'data/letters-de.fnt';    ; $a400

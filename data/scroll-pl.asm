@@ -1,5 +1,13 @@
+.ifdef LANG
+		opt h-
+		org $7E58
+.endif
+
 _star = $DB
 _diamond = $DC
+
+scroll_sizes
+		dta $B5, $32, $3B, $37
 
 scrolls_Pointers
 		dta a(titleScroll)
@@ -16,14 +24,6 @@ titleScroll
 			_star, _star, _star, d' ORYGINALNY POMYS& '*, _diamond, \
 			d' ANDRZEJ BAKA ', _diamond, \
 			d' MARIUSZ BURAS '
-;		dta _star, _star, _star, d' zasady  '
-;		dta d'PRZEMIESZCZAJ SI% KRETEM I ZJADAJ CEG&Y,JEDNOCZE)NIE,UNIKAJ ZGNIECENIA PRZEZ NIE '*
-;		dta _star, _star, _star, d' punktacja  '
-;		dta d'IM WY*EJ ZJADASZ,TYM WI%KSZA ILO)$ PUNKT(W '*
-;		dta _diamond,d' P%KAJ#CE CEG&Y S# CENNIEJSZE '
-;		dta _diamond,d' JE)LI PASEK POST%PU -NA DOLE EKRANU- SI%GNIE ETYKIETY '*,d'level',d', ZWIEKSZA SI% POZIOM TRUDNO)CI '*
-;		dta _star, _star, _star, d' ',d'sterowanie '
-;		dta d' KLAWIATURA',d' STRZA&KI '*,d'ORAZ',d' RETURN '*,_diamond,d' JOYSTICK',d' PODPI%TY DO PORTU 1 '*
 		dta _star, _star, _star, \
 			d' WERSJA atari '*, _diamond, \
 			d' KOD '*,d'PAWE& pebe BANA) ', _diamond, \

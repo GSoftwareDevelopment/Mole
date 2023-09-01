@@ -1,3 +1,8 @@
+.ifdef LANG
+		opt h-
+		org $8000
+.endif
+
 _ou = '#'
 _ci = '$'
 _eu = '%'
@@ -9,6 +14,13 @@ _rz = '*'
 _rzi= '+'
 
 _EOL = $FF
+
+history_array
+		dta 2, 3 ,7
+		dta 3, 5 ,3
+		dta 4, 5 ,4
+		dta 5, 2 ,9
+
 strings_Pointers
 			dta a(strings_menu)
 			dta a(strings_bests)

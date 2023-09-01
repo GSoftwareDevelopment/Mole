@@ -24,7 +24,7 @@ HEIGHT	= 30
 ; ---	MAIN PROGRAM
 	org $2000
 ant	dta $44,a(scr)
-	dta $04,$04,$04,$84,$04,$04,$04,$84,$04,$04,$84,$04,$84,$84,$04,$04
+	dta $04,$04,$04,$04,$04,$04,$04,$04,$84,$04,$84,$84,$84,$84,$04,$04
 	dta $04,$04,$04,$04,$04,$04,$04,$84,$84,$04,$04,$04,$04
 	dta $41,a(ant)
 
@@ -134,91 +134,186 @@ dli1	lda trig0		; FIRE #0
 
 	:3 sta wsync
 
-	DLINEW dli7
-
-	eif
-
-dli_start
-
-dli7
-	sta regA
-
+	sta wsync		;line=0
+	sta wsync		;line=1
+	sta wsync		;line=2
+	sta wsync		;line=3
+	sta wsync		;line=4
+	sta wsync		;line=5
+	lda #$04
+	sta wsync		;line=6
+	sta gtictl
+	sta wsync		;line=7
+c8	lda #$76
+	sta wsync		;line=8
+	sta colbak
+	sta wsync		;line=9
+	sta wsync		;line=10
+	sta wsync		;line=11
+	sta wsync		;line=12
+	sta wsync		;line=13
+	sta wsync		;line=14
+	sta wsync		;line=15
+	sta wsync		;line=16
+	sta wsync		;line=17
+	sta wsync		;line=18
+	sta wsync		;line=19
+	sta wsync		;line=20
+	sta wsync		;line=21
+	sta wsync		;line=22
+	sta wsync		;line=23
+c9	lda #$0E
+	sta wsync		;line=24
+	sta color2
+	lda #$00
+	sta wsync		;line=25
+	sta gtictl
+	sta wsync		;line=26
+	sta wsync		;line=27
+	sta wsync		;line=28
+	sta wsync		;line=29
+	sta wsync		;line=30
+	sta wsync		;line=31
+	sta wsync		;line=32
+	sta wsync		;line=33
+	sta wsync		;line=34
+	sta wsync		;line=35
+	sta wsync		;line=36
+	sta wsync		;line=37
+	sta wsync		;line=38
+	sta wsync		;line=39
+c10	lda #$74
 	sta wsync		;line=40
+	sta colbak
 	sta wsync		;line=41
-	lda #$21
+	lda #$01
+s3	ldx #$00
+x7	ldy #$84
 	sta wsync		;line=42
 	sta gtictl
-	DLINEW DLI.dli2 1 0 0
-
-dli2
-	sta regA
-	stx regX
-	lda >fnt+$400*$01
-c9	ldx #$D4
+	stx sizep0
+	stx sizep1
+	sty hposp0
+x8	lda #$83
+	sta hposp1
+c11	lda #$04
+	sta colpm0
+c12	lda #$02
+	sta colpm1
+	sta wsync		;line=43
+	sta wsync		;line=44
+	sta wsync		;line=45
+	sta wsync		;line=46
+	sta wsync		;line=47
+	sta wsync		;line=48
+	sta wsync		;line=49
+	sta wsync		;line=50
+	sta wsync		;line=51
+	sta wsync		;line=52
+	sta wsync		;line=53
+	sta wsync		;line=54
+	sta wsync		;line=55
+c13	lda #$12
+	sta wsync		;line=56
+	sta color2
+	sta wsync		;line=57
+	sta wsync		;line=58
+	sta wsync		;line=59
+	sta wsync		;line=60
+	sta wsync		;line=61
+	sta wsync		;line=62
+	sta wsync		;line=63
+	sta wsync		;line=64
+	sta wsync		;line=65
+	sta wsync		;line=66
+	sta wsync		;line=67
+	sta wsync		;line=68
+	sta wsync		;line=69
+	sta wsync		;line=70
+	sta wsync		;line=71
+c14	lda #$72
+c15	ldx #$D4
 	sta wsync		;line=72
-	sta chbase
+	sta colbak
 	stx color3
 	sta wsync		;line=73
 	sta wsync		;line=74
 	sta wsync		;line=75
 	sta wsync		;line=76
 	sta wsync		;line=77
-c10	lda #$1C
+c16	lda #$1C
 	sta wsync		;line=78
 	sta color1
-	DLINEW dli8 1 1 0
+	mwa #null null+1
+	jmp null
 
-dli8
+	eif
+
+dli_start
+
+dli2
+	sta regA
+	lda >fnt+$400*$01
+	sta wsync		;line=80
+	sta chbase
+	DLINEW dli6 1 0 0
+
+dli6
 	sta regA
 	stx regX
 	sty regY
 
-c11	lda #$14
-c12	ldx #$1C
-c13	ldy #$C4
+c17	lda #$14
+c18	ldx #$1C
+c19	ldy #$C4
 	sta wsync		;line=96
 	sta color1
 	stx color2
 	sty color3
-	sta wsync		;line=97
-	sta wsync		;line=98
-	sta wsync		;line=99
-	sta wsync		;line=100
-	sta wsync		;line=101
-	sta wsync		;line=102
-	lda #$01
-	sta wsync		;line=103
-	sta gtictl
-c14	lda #$2A
-c15	ldx #$14
-c16	ldy #$12
+	DLINEW dli7 1 1 1
+
+dli7
+	sta regA
+	stx regX
+	sty regY
+
+c20	lda #$70
+c21	ldx #$2A
+c22	ldy #$14
 	sta wsync		;line=104
-	sta color1
-	stx color2
-	sty color3
-	DLINEW dli3 1 1 1
+	sta colbak
+	stx color1
+	sty color2
+c23	lda #$12
+	sta color3
+	DLINEW dli8 1 1 1
+
+dli8
+	sta regA
+
+c24	lda #$12
+	sta wsync		;line=112
+	sta colbak
+	sta wsync		;line=113
+c25	lda #$10
+	sta wsync		;line=114
+	sta colbak
+	DLINEW dli3 1 0 0
 
 dli3
-	sta regA
-	lda >fnt+$400*$02
-	sta wsync		;line=112
-	sta chbase
-	DLINEW dli4 1 0 0
-
-dli4
 	sta regA
 	stx regX
 	sty regY
 	lda >fnt+$400*$00
-c17	ldx #$04
-c18	ldy #$06
+c26	ldx #$04
+c27	ldy #$06
 	sta wsync		;line=120
 	sta chbase
 	stx color0
 	sty color1
-c19	lda #$0A
+c28	lda #$0A
 	sta color2
-c20	lda #$0E
+c29	lda #$0E
 	sta color3
 	DLINEW dli9 1 1 1
 
@@ -227,21 +322,21 @@ dli9
 	stx regX
 	sty regY
 
-x8	lda #$30
-x9	ldx #$38
-x10	ldy #$C0
+x9	lda #$30
+x10	ldx #$38
+x11	ldy #$C0
 	sta wsync		;line=200
 	sta hposp0
 	stx hposp1
 	sty hposp2
-x11	lda #$C8
+x12	lda #$C8
 	sta hposp3
-c21	lda #$2C
+c30	lda #$2C
 	sta colpm0
 	sta colpm1
-c22	lda #$08
+c31	lda #$08
 	sta colpm2
-c23	lda #$0E
+c32	lda #$0E
 	sta colpm3
 	DLINEW dli10 1 1 1
 
@@ -250,97 +345,97 @@ dli10
 	stx regX
 	sty regY
 
-c24	lda #$18
+c33	lda #$18
 	sta wsync		;line=208
 	sta colpm0
 	sta colpm1
-c25	lda #$28
+c34	lda #$28
 	sta wsync		;line=209
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c26	lda #$38
+c35	lda #$38
 	sta wsync		;line=210
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c27	lda #$48
+c36	lda #$48
 	sta wsync		;line=211
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c28	lda #$58
+c37	lda #$58
 	sta wsync		;line=212
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c29	lda #$68
+c38	lda #$68
 	sta wsync		;line=213
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c30	lda #$78
+c39	lda #$78
 	sta wsync		;line=214
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c31	lda #$88
+c40	lda #$88
 	sta wsync		;line=215
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c32	lda #$98
+c41	lda #$98
 	sta wsync		;line=216
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c33	lda #$A8
+c42	lda #$A8
 	sta wsync		;line=217
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c34	lda #$B8
+c43	lda #$B8
 	sta wsync		;line=218
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c35	lda #$C8
+c44	lda #$C8
 	sta wsync		;line=219
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c36	lda #$D8
+c45	lda #$D8
 	sta wsync		;line=220
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c37	lda #$E8
+c46	lda #$E8
 	sta wsync		;line=221
 	sta colpm0
 	sta colpm1
 	sta colpm2
 	sta colpm3
-c38	lda #$F8
-c39	ldx #$08
-c40	ldy #$0E
+c47	lda #$F8
+c48	ldx #$08
+c49	ldy #$0E
 	sta wsync		;line=222
 	sta colpm0
 	sta colpm1
 	stx colpm2
 	sty colpm3
-c41	lda #$2C
+c50	lda #$2C
 	sta wsync		;line=223
 	sta colpm0
 	sta colpm1
@@ -354,7 +449,7 @@ c41	lda #$2C
 
 ; ---
 
-CHANGES = 1
+CHANGES	= 0
 FADECHR	= 0
 
 SCHR	= 127
@@ -366,7 +461,7 @@ SCHR	= 127
 	bit nmist
 	bpl VBL
 
-	jmp DLI.dli_start
+	jmp DLI.dli2
 dliv	equ *-2
 
 VBL
@@ -386,7 +481,7 @@ VBL
 
 	lda >fnt+$400*$00
 	sta chbase
-c0	lda #$00
+c0	lda #$78
 	sta colbak
 c1	lda #$16
 	sta color0
@@ -400,38 +495,39 @@ c4	lda #$1C
 	sta chrctl
 	lda #$00
 	sta gtictl
+s0	lda #$03
 	sta sizep0
 	sta sizep1
+x0	lda #$3A
+	sta hposp0
+x1	lda #$5A
+	sta hposp1
+c5	lda #$0E
+	sta colpm0
+	sta colpm1
+s1	lda #$00
 	sta sizep2
 	sta sizep3
-x0	lda #$84
-	sta hposp0
-x1	lda #$83
-	sta hposp1
+s2	lda #$03
+	sta sizem
 x2	lda #$8C
 	sta hposp2
 x3	lda #$8B
 	sta hposp3
-x4	lda #$94
+x4	lda #$58
 	sta hposm0
 x5	lda #$82
 	sta hposm1
 x6	lda #$94
 	sta hposm2
-x7	lda #$96
 	sta hposm3
-c5	lda #$04
-	sta colpm0
-c6	lda #$02
-	sta colpm1
-c7	lda #$04
+c6	lda #$04
 	sta colpm2
-c8	lda #$02
+c7	lda #$02
 	sta colpm3
-s0	lda #$00
-	sta sizem
 
-	mwa #DLI.dli_start dliv	;set the first address of DLI interrupt
+	mwa #DLI.dli2 dliv	;set the first address of DLI interrupt
+	mwa #DLI.dli1 null+1	;synchronization for the first screen line
 
 ;this area is for yours routines
 
@@ -460,7 +556,7 @@ missiles
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 00 20 20 20 20 20 20 20 20 00 00 00
+	.he 00 00 80 C0 E0 30 20 20 20 20 20 20 20 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 04 0C 08 08 0C 04 00 00 00
@@ -475,9 +571,9 @@ missiles
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 player0
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	.he 00 0C 1E 3F 3F 7F FF 5F 3F 7F FD FB 7E 7E 34 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00
+	.he 00 00 00 00 00 00 00 00 00 00 00 01 00 01 03 00
 	.he 03 01 03 03 03 07 03 07 0F 07 0F 1F 0F 3F 1F 3B
 	.he 3F 2D 5D 4D 5D 5D 7F D1 60 E0 E0 60 E0 60 2A 7F
 	.he 3F 3F 3F 17 37 17 93 97 05 01 00 00 80 40 40 00
@@ -492,9 +588,9 @@ player0
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 player1
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	.he 00 70 F8 7C BC FE FE FF FF FB FE F6 BC 08 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 01 01 01
+	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 01
 	.he 00 01 00 02 02 00 06 04 00 0C 08 00 18 00 10 02
 	.he 00 29 11 19 11 51 40 17 C8 80 80 C0 80 C0 E0 C0
 	.he E0 E0 E0 F4 64 74 36 14 0D 81 80 40 20 00 00 00
@@ -511,7 +607,7 @@ player2
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 01 03 0F 1F 3F 7F FF CF 9F DF FF FF
+	.he 00 00 00 01 01 03 0F 1F 3F FF FF CF 9F DF FF FF
 	.he F6 F2 F8 FC FC F8 F8 B0 C0 C0 C0 E0 C0 F0 E0 F0
 	.he F0 F0 F8 F0 F0 F0 F8 F0 F8 70 70 70 7C FC F8 BC
 	.he BE DC 9E DE DE F8 F0 F0 80 00 00 00 00 00 00 00
@@ -528,7 +624,7 @@ player3
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-	.he 00 00 00 00 01 06 18 30 60 40 80 98 B0 90 00 80
+	.he 00 00 00 00 01 06 18 30 60 00 80 18 B0 10 00 80
 	.he 04 06 02 00 00 00 00 20 10 10 18 08 1C 04 0C 04
 	.he 04 06 02 06 06 04 00 04 80 44 44 04 00 00 02 20
 	.he 20 11 30 10 10 00 00 00 00 00 00 00 00 00 00 00

@@ -439,7 +439,7 @@ findNext
       iny
       lda (lstvec),y
 ;				.print "break at ",*
-		  cmp #17				; wybieraj TYLKO bloki, nie "coinsy"!
+	cmp #17				; wybieraj TYLKO bloki, nie "coinsy"!
       beq findNext
 
       sta Block
@@ -465,7 +465,7 @@ findNext
 ; sprwdzenie, czy został znaleziony jakikolwiek block
 endFind
       stx BM
-      ; cpx #0
+      cpx #0
       bne randOne
 ; jeżeli nie, zwróć $FF
 endRndBttmBlk_noBlocksFound

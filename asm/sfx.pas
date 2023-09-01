@@ -144,9 +144,20 @@ begin
 	audctl:=%00000000;
 	skctl:=%00;
 	skctl:=%11;
+  nmien:=0;
 	GetIntVec(iVBL, oldVBL);
   SetIntVec(iVBL, @SFX_tick);
+  nmien:=$40;
+end;
+
+procedure SFX_Done();
+begin
+  nmien:=0;
+	SetIntVec(iVBL, oldVBL);
   nmien := $40;
+	audctl:=%00000000;
+	skctl:=%00;
+	skctl:=%11;
 end;
 
 procedure SFX_Play(chn,freq:Byte; sfxID:Word);

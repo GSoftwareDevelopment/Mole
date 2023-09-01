@@ -2,11 +2,9 @@
 ; MIDI plays only for NOTES!
 
 _temp = $dc
-_regA =	$dd
 _regX = $de
 _regY = $df
 
-	sta _regA	; note_index
 	stx _regX	; player channel offset
   sty _regY ; SFX#
 
@@ -110,7 +108,6 @@ MIDI_send_note_on:
 
   sec
 MIDI_end:
-	lda _regA
 	ldx _regX
   ldy _regY
 

@@ -22,6 +22,11 @@ var
 
 	lastDefinedBlock:Byte = DefinedBlocks;
 
+procedure putBlocksOnScreen;
+begin
+	move(pointer(SCREEN_BUFFER_ADDR),@scr[40],240);// draw blocks on screen
+end;
+
 // Rysuj blok
 procedure DrawBlock(_Xpos,_Ypos,_Block,_Color:Byte);
 begin
@@ -29,9 +34,13 @@ begin
 	Ypos:=_Ypos;
 	Block:=_Block;
 	Color:=_Color;
-	asm {
+	asm
+.ifndef MAIN.@DEFINES.INCLUDE_LANG
+		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.DRAWBLOCK // BLOCK_ASM_ADDR+$000e
+.else
 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.DRAWBLOCK // BLOCK_ASM_ADDR+$000e
-	};
+.endif
+	end;
 end;
 
 // function TestBlock(_Xpos,_Ypos,_Block:Byte):Boolean;
@@ -39,9 +48,13 @@ end;
 // 	Xpos:=_Xpos;
 // 	Ypos:=_Ypos;
 // 	Block:=_Block;
-// 	asm {
+// 	asm
+// .ifndef MAIN.@DEFINES.INCLUDE_LANG
+// 		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.TESTBLOCK // BLOCK_ASM_ADDR+$0032
+// .else
 // 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.TESTBLOCK // BLOCK_ASM_ADDR+$0032
-// 	};
+// .endif
+// 	end;
 // 	result:=Boolean(fr0); // zwrot, prawda, jeżeli testowany blok koliduje
 // end;
 
@@ -50,17 +63,25 @@ begin
 	Xpos:=_Xpos;
 	Ypos:=_Ypos;
 	Block:=_Block;
-	asm {
+	asm
+.ifndef MAIN.@DEFINES.INCLUDE_LANG
+		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.CLEARBLOCK // BLOCK_ASM_ADDR+$0065
+.else
 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.CLEARBLOCK // BLOCK_ASM_ADDR+$0065
-	};
+.endif
+	end;
 end;
 
 function DropBlocks(_totalBlocks:Byte):Byte;
 begin
 	tb:=_totalBlocks;
-	asm {
+	asm
+.ifndef MAIN.@DEFINES.INCLUDE_LANG
+		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.DROPBLOCKS // BLOCK_ASM_ADDR+$0082
+.else
 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.DROPBLOCKS // BLOCK_ASM_ADDR+$0082
-	};
+.endif
+	end;
 	result:=Byte(fr0); // zwrot, ilość osuniętych bloków
 end;
 
@@ -69,9 +90,13 @@ begin
 	testX:=_X;
 	testY:=_Y;
 	tb:=_totalBlocks;
-	asm {
+	asm
+.ifndef MAIN.@DEFINES.INCLUDE_LANG
+		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.POINTTEST // BLOCK_ASM_ADDR+$00d4
+.else
 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.POINTTEST // BLOCK_ASM_ADDR+$00d4
-	};
+.endif
+	end;
 	result:=Byte(fr0); // zwrot, numer bloku spełniającego test
 end;
 
@@ -79,18 +104,26 @@ function ShuffleBlocks(_Ypos,_totalBlocks:Byte):Byte;
 begin
 	Ypos:=_Ypos;
 	tb:=_totalBlocks;
-	asm {
+	asm
+.ifndef MAIN.@DEFINES.INCLUDE_LANG
+		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.SHUFFLEBLOCK // BLOCK_ASM_ADDR+$0153
+.else
 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.SHUFFLEBLOCK // BLOCK_ASM_ADDR+$0153
-	};
+.endif
+	end;
 	result:=Byte(fr0); // zwrot, ilość nowych bloków
 end;
 
 function RandomBottomBlock(_totalBlocks:Byte):Byte;
 begin
 	tb:=_totalBlocks;
-	asm {
+	asm
+.ifndef MAIN.@DEFINES.INCLUDE_LANG
+		jsr RESOURCE.RESOURCE.RCASM3.RESOURCE._BLOCK_ASM_ADDR.RANDOMBOTTOMBLOCK // BLOCK_ASM_ADDR+$01ac
+.else
 		jsr RESOURCE.RESOURCE.RCASM5.RESOURCE._BLOCK_ASM_ADDR.RANDOMBOTTOMBLOCK // BLOCK_ASM_ADDR+$01ac
-	};
+.endif
+	end;
 	result:=Byte(fr0); // zwrot, offset wylosowanego bloku, lub $ff, jeżeli takiego bloku nie ma
 end;
 

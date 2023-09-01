@@ -1,10 +1,11 @@
 var
-	scrollTexts:array[0..0] of Word absolute SCROLL_DATA_ADDR;
+	scrollSizes:array[0..3] of Byte absolute SCROLL_DATA_ADDR;
+	scrollTexts:array[0..0] of Word absolute SCROLL_DATA_ADDR + 4;
 	scroll:Word;
 	HSCROLL:Byte absolute $d404;
 	cFineScroll:shortint = 0;
 	cScrollPos:smallint = 0;
-	scrollTime:Byte;
+	scrollTime:Byte absolute TIMER2;
 	scrollScrOfs:Word;
 	scrollLn:shortint;
 	scrollScrShift:shortint;
@@ -18,6 +19,7 @@ begin
 	scrollLn:=0;
 	scrollShift:=0;
 	scrollScrShift:=18;
+	scrollTime:=0;
 	fillchar(Pointer(scrollScrOfs),18,0);
 end;
 
@@ -26,13 +28,14 @@ begin
 	scroll:=scrollTexts[id];
 	scrollSize:=scrollSizes[id];
 	scrollScrOfs:=scrollScreenOfs[id];
+	scrollTime:=0;
 end;
 
 procedure scroll_tick();
 begin
-	if (_timer-scrollTime<>0) then
+	if (scrollTime=0) then
 	begin
-		scrollTime:=_timer;
+		scrollTime:=1;
 		cFineScroll:=cFineScroll-1;
 		if (cFineScroll<0) then
 		begin

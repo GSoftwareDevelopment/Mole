@@ -14,11 +14,15 @@
 reset_all_tracks
 
 ; MIDI Reset
+	lda isMIDIDrv
+	beq @+
+
 	tya:pha
 	lda #$FF
 	jsr $2006
 	pla:tay
 
+@:
 	ldx #48
 	lda #0
 clear_MIDI_CHANNELS:

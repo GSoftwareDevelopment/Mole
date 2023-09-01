@@ -25,6 +25,7 @@ var
   SONG_RepCount:Byte absolute SFX_REGISTERS+$03;
 
   channels:array[0..0] of Byte absolute SFX_CHANNELS_ADDR;
+	isMIDIDrv:Boolean = false;
 
 procedure INIT_SFXEngine(); Assembler;
 procedure SFX_StartDLI();

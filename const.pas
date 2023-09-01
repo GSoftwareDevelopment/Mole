@@ -69,23 +69,6 @@ const
 	scroll_bestsList= 2;
 	scroll_bestsMode= 3;
 
-{$IFDEF ENGLISH}
-	scrollSizes:array[0..3] of smallint=(
-		$AC,
-		$22,
-		$34,
-		$35
-	);
-{$ENDIF}
-{$IFDEF POLISH}
-	scrollSizes:array[0..3] of smallint=(
-		$B5,
-		$32,
-		$3B,
-		$37
-	);
-{$ENDIF}
-
 	scrollScreenOfs:array[0..3] of Word =(
 		SCREEN_ADDR+SCREEN_TITLE_SIZE-20,
 		SCREEN_ADDR+SCREEN_HISTORY_SIZE-20,
@@ -95,24 +78,12 @@ const
 
 	string_menu			= 0;
 	string_bests		= 1;
-{$IFDEF ENGLISH}
-	string_history	: array[0..3,0..2] of Byte = (
-		(2, 3 ,7),
-		(3, 5 ,3),
-		(4, 4 ,6),
-		(5, 2 ,9)
-	);
-{$ENDIF}
-{$IFDEF POLISH}
-	string_history	: array[0..3,0..2] of Byte = (
-		(2, 3 ,7),
-		(3, 5 ,3),
-		(4, 5 ,4),
-		(5, 2 ,9)
-	);
-{$ENDIF}
 	string_ready	= 6;
 	string_gameover	= 7;
 	string_topstatus= 8;
 
-	colors_title : array[0..4] of Byte = ($a8, $ca, $94, $46, $00);
+	TIMER1 = $68;
+	TIMER2 = $69;
+	TIMER3 = $6a;
+	TIMER4 = $6b;
+	TIMER5 = $6c;

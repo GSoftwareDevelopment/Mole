@@ -4,8 +4,15 @@
 ; a - frequency/note_index
 ; C flag - (1)frequency/(0)note_index
 
-	php
+_regA = $dd
 
+	php
+	sta _regA	; note_index
+	lda isMIDIDrv
+	bne do_midi
+	jmp do_sfx
+do_midi:
+	lda _regA
 	icl 'sfx2midi.asm'
 	bcc do_sfx
 	plp
@@ -13,7 +20,6 @@
 
 do_sfx:
 	plp
-	pha                                 ; temporary put freq/note_index to stack
 
 	lda #SFX_OFF
 	sta SFX_CHANNELS_ADDR+_chnOfs,x     ; prevent SFX playback
@@ -44,7 +50,7 @@ PlayNote_setNoteTableOfs
 	bne PlayNote_setNote
 
 PlayNote_setFreq
-	pla
+	lda _regA
 	sta SFX_CHANNELS_ADDR+_chnFreq,x
 
 	lda #$00
@@ -53,7 +59,7 @@ PlayNote_setFreq
 	rts
 
 PlayNote_setNote
-	pla                                 ; get freq/note_index from stack
+	lda _regA														; get freq/note_index from stack
 	sta SFX_CHANNELS_ADDR+_chnNote,x    ; set in channels register
 
 	tay

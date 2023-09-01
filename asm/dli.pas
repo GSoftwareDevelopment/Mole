@@ -142,6 +142,10 @@ c16	ldy #$12
 		stx color2
 		sty color3
 
+		lda #$12
+		:6 sta wsync
+		sta colbak
+
 		lda #>dli1_title_4
 		sta vdli+1
 		lda #<dli1_title_4
@@ -154,10 +158,14 @@ c16	ldy #$12
 
 dli1_title_4
 		sta _regA
+		stx _regX
+		sty _regY
 
 		lda #CHARSET5_PAGE+8
+		ldx #$10
     sta wsync
 		sta chbase
+		stx colbak
 
 		lda #>dli1_menu
 		sta vdli+1
@@ -165,12 +173,17 @@ dli1_title_4
 		sta vdli
 
 		lda _regA
+		ldx _regX
+		ldy _regY
 		rti
+
 
 ; -------------------------
 
 dli1_menu
 		sta _regA
+		stx _regX
+		sty _regY
 
 		lda #>dli1_ftr
 		sta vdli+1
@@ -178,14 +191,12 @@ dli1_menu
 		sta vdli
 
 		lda #CHARSET1_PAGE
+		ldx #$08
+		ldy #$0f
     sta wsync
 		sta chbase
-
-		lda #$08
-		sta $d016
-
-		lda #$0f
-		sta $d017
+		stx $d016
+		sty $d017
 		lda #$9a
 		sta $d018
 		lda #$4a
@@ -200,21 +211,33 @@ x10	lda #192
 x11	lda #200
 		sta hposp3
 
+// 		lda #$10
+// 		ldx #$12
+// 		ldy #21
+// loop2:
+// 		sta wsync
+// 		sta wsync
+// 		sta colbak
+// 		sta wsync
+// 		sta wsync
+// 		stx colbak
+// 		dey
+// 		bne loop2
+
 		lda _regA
+		ldx _regX
+		ldy _regY
 		rti
 
 dli1_ftr
 		sta _regA
 		sty _regY
 
-		lda #>dli1_title_init
-		sta vdli+1
-		lda #<dli1_title_init
-		sta vdli
-
 		lda #%00111001
+		ldy #0
 		sta wsync
 		sta dmactl
+		sty colbak
 		lda #$26
 		sta $d016
 		lda #$ca
@@ -236,6 +259,11 @@ l1  lda RAINBOW_ADDR,y
 		lda #%00111010
 		sta wsync
 		sta dmactl
+
+		lda #>dli1_title_init
+		sta vdli+1
+		lda #<dli1_title_init
+		sta vdli
 
 		lda _regA
 		ldy _regY
@@ -522,9 +550,9 @@ _regY 	= $df
 dli_bests
 		sta _regA
 
-		lda #>dli_bests_ftr
+		lda #>dli_bests_1
 		sta vdli+1
-		lda #<dli_bests_ftr
+		lda #<dli_bests_1
 		sta vdli
 
 		lda #CHARSET2_PAGE
@@ -535,12 +563,52 @@ dli_bests
 		lda #$84
 		sta $d017
 
-		lda #$0a
+		lda #$BA
 		sta $d018
-		lda #$0f
+		lda #$EE
 		sta $d019
 
 		lda _regA
+		rti
+
+dli_bests_1
+		sta _regA
+		stx _regx
+
+		lda #$30
+		ldx #$32
+		sta wsync
+		sta $d016
+		stx $d017
+
+		lda #>dli_bests_2
+		sta vdli+1
+		lda #<dli_bests_2
+		sta vdli
+
+		lda _regA
+		ldx _regX
+		rti
+
+dli_bests_2
+		sta _regA
+		stx _regx
+
+		lda #$82
+		ldx #$84
+		sta wsync
+		sta wsync
+		sta wsync
+		sta $d016
+		stx $d017
+
+		lda #>dli_bests_ftr
+		sta vdli+1
+		lda #<dli_bests_ftr
+		sta vdli
+
+		lda _regA
+		ldx _regX
 		rti
 
 dli_bests_ftr

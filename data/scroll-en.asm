@@ -1,5 +1,13 @@
+.ifdef LANG
+		opt h-
+		org $7E58
+.endif
+
 _star = $DB
 _diamond = $DC
+
+scroll_sizes
+		dta	$AC, $22, $34, $35
 
 scrolls_Pointers
 		dta a(titleScroll)

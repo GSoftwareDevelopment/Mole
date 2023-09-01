@@ -1,10 +1,10 @@
 	lda #$80
 	sta SONG_TICK_COUNTER
-	; lda #$00
-	; sta audctl
-	; sta skctl
-	; lda #%11
-	; sta skctl
+	lda #$00
+	sta audctl
+	sta skctl
+	lda #%11
+	sta skctl
 
 	lda #$ff
 	sta SONG_Ofs

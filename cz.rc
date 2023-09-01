@@ -1,0 +1,6 @@
+SCROLL_DATA_ADDR      rcasm  'data/scroll-cz.asm';
+STRINGS_PointerS_ADDR rcasm  'data/strings-cz.asm';
+
+; game charcter set
+CHARSET1_ADDR         rcdata 'data/title-b-cz.fnt'
+CHARSET2_ADDR         rcdata 'data/letters-cz.fnt';

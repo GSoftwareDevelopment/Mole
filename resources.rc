@@ -2,12 +2,8 @@
 ;
 SCR_TITLE_ADDR        rcdata 'pics/title.scr';
 SCR_STATUSBAR_ADDR    rcdata 'data/game-footer.scr';
-SCROLL_DATA_ADDR      rcasm  'data/scroll-pl.asm';
-STRINGS_PointerS_ADDR rcasm  'data/strings-pl.asm';
 
 ; game charcter set
-CHARSET1_ADDR         rcdata 'data/title-b.fnt'
-CHARSET2_ADDR         rcdata 'data/letters.fnt';
 CHARSET3_ADDR         rcdata 'data/kret-chars.fnt';
 CHARSET4_ADDR         rcdata 'pics/start_gameover.fnt';
 CHARSET5_ADDR         rcdata 'pics/title.fnt';
@@ -21,6 +17,9 @@ G2F_SCREEN            rcdata 'pics/start_gameover.scr';
 G2F_PMG	              rcasm  'pics/start_gameover.pmg';
 G2F_TITLE_PMG         rcdata 'pics/title.pmg';
 
+; GSD-logo
+LOGO_ADDR             rcdata 'data/gsd-logo.obj';
+
 ; assembler procedures for game
 BLOCK_ASM_ADDR        rcasm 'asm/block.asm';
 BLOCKS_DEF_ADDR       rcasm 'data/blocks-def.asm';
@@ -30,7 +29,7 @@ DLIST_TITLE_ADDR      rcasm 'asm/dlist-title.asm'
 DLIST_GAME_ADDR       rcasm 'asm/dlist-game.asm'
 DLIST_READY_ADDR      rcasm 'asm/dlist-ready.asm'
 DLIST_GAMEOVER_ADDR   rcasm 'asm/dlist-gameover.asm'
-DLIST_BESTS_ADDR      rcasm 'asm/dlist-bests.asm'
+DLIST_INTRO_ADDR      rcasm 'asm/dlist-logo.asm'
 DLIST_HISTORY_ADDR    rcasm 'asm/dlist-history.asm'
 
 ;

@@ -10,8 +10,22 @@ The creators of the original are Andrzej Baka and Mariusz Buras. They wrote the 
 
 # RUN
 
-To run, you will need the MAD Pascal compiler and an ATARI emulator, or real hardware and software that allows you to load the compiled program.
+To run, you will need an ATARI emulator, or real hardware and software that allows you to load the compiled program.
 
+If you have: **MIDICar**, **MIDIBox** or **MIDIMate**, before starting the game, first load from the `\MIDI.DRV` directory one of the drivers intended for your MIDI interface. Only after this, load the game, for ex.:
+
+```
+MIDICAR.DRV
+KRET.EXE
+```
+
+# COMPILE
+You will need the MAD Pascal compiler and MADS Assembler.
+
+```
+mp kret.pas -o:kret.a65 -code:2180
+mads kret.a65 -x -o:kret.xex
+```
 # CREDITS
 
 Would you like to be a part of this project?
